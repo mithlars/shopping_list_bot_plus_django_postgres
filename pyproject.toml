@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "shopping-list-telegram-bot-02-django"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.1"
+aiogram = "^3.3.0"
+requests = "^2.31.0"
+djangorestframework = "^3.14.0"
+pillow = "^10.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

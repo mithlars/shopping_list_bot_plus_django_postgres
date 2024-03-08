@@ -1,0 +1,72 @@
+version: '3.8'
+name: shopping_list
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      - POSTGRES_DB=list_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - PG_DATA=/var/lib/pgsql/pgdata
+      - pgsql='psql -U postgres -nxq -v ON_ERROR_STOP=on --dbname list_db'
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - shopping_list_net
+    ports:
+      - '5432:5432'
+  django:
+    container_name: django
+    build:
+      context: .
+      dockerfile: ./djDocker/Dockerfile
+    command: ./start.sh
+    #    command: sh -c "/django/start.sh && python manage.py runserver 0.0.0.0:8000"
+#    command: sh -c 'python manage.py makemigrations && python manage.py migrate && python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); user = User.objects.create_user(username=os.environ.get('DJANGO_USERNAME'), password=os.environ.get('DJANGO_USER_PASSWORD')); os.putenv('TELEGRAM_BOT_USER_ID', user.id)" && while true; do sleep 1000; done'
+#    command: sh -c "while true; do sleep 1000; done"
+#    python manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD
+      - DB_CONNECTOR=postgres_container_config
+      - DJANGO_USERNAME
+      - DJANGO_USER_PASSWORD
+      - TELEGRAM_BOT_IP=192.168.128.4
+      - TELEGRAM_BOT_USER_ID=0
+    networks:
+      - shopping_list_net
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  bot:
+    container_name: bot
+    build: .
+    command: sh -c "python ./bot/main.py"
+#    command: sh -c "while true; do sleep 1000; done"
+    restart: always
+    environment:
+      - API_TOKEN
+      - DJANGO_USERNAME
+      - DJANGO_USER_PASSWORD
+      - DJANGO_ADDRESS=http://django:8000
+      - PYTHONPATH=/app
+    depends_on:
+      - django
+    networks:
+      - shopping_list_net
+volumes:
+  pgdata:
+
+networks:
+  shopping_list_net:
+    external: true
