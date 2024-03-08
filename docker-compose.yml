@@ -1,5 +1,4 @@
 version: '3.8'
-name: shopping_list
 services:
   db:
     container_name: postgres
