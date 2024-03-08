@@ -12,3 +12,4 @@ COPY list ./list/
 COPY manage.py .
 COPY __init__.py .
 COPY djDocker/start.sh .
+RUN chmod 755 djDocker/start.sh
