@@ -62,10 +62,16 @@ services:
     depends_on:
       - django
     networks:
-      - shopping_list_net
+      shopping_list_net:
+        ipv4_address: 192.168.128.4
+
 volumes:
   pgdata:
 
 networks:
   shopping_list_net:
     external: true
+    driver: default
+    ipam:
+      config:
+          - subnet: 192.168.128.0/16
