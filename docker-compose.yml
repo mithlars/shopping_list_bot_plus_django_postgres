@@ -70,7 +70,4 @@ volumes:
 
 networks:
   shopping_list_net:
-    driver: default
-    ipam:
-      config:
-          - subnet: 172.18.0.0/16
+    external: True
