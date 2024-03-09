@@ -3,6 +3,7 @@ from aiogram.types import Message, User
 from aiogram.filters import CommandStart
 from requests import Response
 
+from bot.business_processes.lists.list_create import ListCreateAPI
 from bot.create_bot import MyBot
 from bot.constants import start_welcome_message, django_address
 
@@ -39,6 +40,6 @@ class Start:
     @start_router.message(CommandStart())
     async def create_new_user(message: Message):
         telegram_user_id = message.from_user.id
-        response = await RegisterAPI.register_new_user(message.from_user)
-        # print(f"response: {response.json()['message']}\n")
+        await RegisterAPI.register_new_user(message.from_user)
+        await ListCreateAPI.create_new_list(telegram_user_id, "Первый список", "")
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=start_welcome_message)
