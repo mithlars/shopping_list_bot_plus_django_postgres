@@ -39,7 +39,7 @@ services:
       - DB_CONNECTOR=postgres_container_config
       - DJANGO_USERNAME
       - DJANGO_USER_PASSWORD
-      - TELEGRAM_BOT_IP=192.168.128.4
+      - TELEGRAM_BOT_IP=172.18.0.4
       - TELEGRAM_BOT_USER_ID=0
     networks:
       - shopping_list_net
@@ -63,15 +63,14 @@ services:
       - django
     networks:
       shopping_list_net:
-        ipv4_address: 192.168.128.4
+        ipv4_address: 172.18.0.4
 
 volumes:
   pgdata:
 
 networks:
   shopping_list_net:
-    external: true
     driver: default
     ipam:
       config:
-          - subnet: 192.168.128.0/16
+          - subnet: 172.18.0.0/16
