@@ -6,9 +6,12 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
+from bot.business_processes.categories.utils.categories_menu_keyboard import categories_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.emoji import emoji
+from bot.translate import transl
 
 category_purify_router = Router()
 
@@ -51,7 +54,11 @@ class CategoryPurifyStart:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=purify_keyboard)
 
     @staticmethod
-    @category_purify_router.message(F.text == emoji['clean'] + emoji['categories'])
+    @category_purify_router.message(
+        lambda message:
+        any(message.text == categories_menu_keyboard_buttons(lang)[button_style]['clean']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def category_purify_start_handler(message: Message):
         telegram_user_id = message.from_user.id
         await CategoryPurifyStart.category_purify_start(telegram_user_id)

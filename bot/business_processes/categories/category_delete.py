@@ -7,10 +7,10 @@ from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from .category_update import UpdateCategoryStart
-from .utils.categories_menu_keyboard import categories_keyboard_builder
+from .utils.categories_menu_keyboard import categories_menu_keyboard_builder, categories_menu_keyboard_buttons
 from ..lists.utils.lits_details_api import get_lists_detail_api
 from ..options.utils.get_profiles_options_api import get_profiles_options_api
-from ...constants import django_address
+from ...constants import django_address, buttons_styles
 from ...create_bot import MyBot
 from ...emoji import emoji
 from ...translate import transl
@@ -109,7 +109,7 @@ class CategoriesDelete:
         list_name = await get_lists_detail_api(telegram_user_id)
         empty_only = transl[lang]['categories']['delete']['empty_only']
         list_message_text = f"{del_cat_from} \"{list_name}\"\n({empty_only}):"
-        main_keyboard = await categories_keyboard_builder()
+        main_keyboard = await categories_menu_keyboard_builder(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id,
                                      text=list_message_text,
                                      reply_markup=main_keyboard,
@@ -124,7 +124,11 @@ class CategoriesDelete:
                                      parse_mode='Markdown')
 
     @staticmethod
-    @categories_delete_router.message(F.text == emoji['delete'] + emoji['categories'])
+    @categories_delete_router.message(
+        lambda message:
+        any(message.text == categories_menu_keyboard_buttons(lang)[button_style]['delete']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def categories_delete_start_handler(message: Message):
         """ Handler-функция для вывода списка с клавиатурой для выбора категории для удаления """
         await CategoriesDelete.categories_delete(message.from_user.id)

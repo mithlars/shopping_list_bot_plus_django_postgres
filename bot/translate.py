@@ -87,6 +87,42 @@ transl = {
                         'clean': 'очист.',
                         'back': 'наз.'
                     }
+                },
+                'groups_menu': {
+                    'buttons': {
+                        'switch': 'сменить',
+                        'edit': 'изменить',
+                        'add': 'создать',
+                        'sort': 'сортировать',
+                        'delete': 'удалить',
+                        'back': 'назад'
+                    },
+                    'buttons_short': {
+                        'switch': 'смен.',
+                        'edit': 'изм.',
+                        'add': 'созд.',
+                        'sort': 'сорт.',
+                        'delete': 'удал.',
+                        'back': 'наз.'
+                    }
+                },
+                'categories_menu': {
+                    'buttons': {
+                        'edit': 'изменить',
+                        'add': 'создать',
+                        'sort': 'сортировать',
+                        'delete': 'удалить',
+                        'clean': 'очистить',
+                        'back': 'назад'
+                    },
+                    'buttons_short': {
+                        'edit': 'изм.',
+                        'add': 'созд.',
+                        'sort': 'сорт.',
+                        'delete': 'удал.',
+                        'clean': 'очист.',
+                        'back': 'наз.'
+                    }
                 }
             },
             'en': {
@@ -168,9 +204,45 @@ transl = {
                     },
                     'buttons_short': {
                         'switch': 'swt.',
-                        'edit': 'ed.',
+                        'edit': 'chg.',
                         'add': 'add',
                         'share': 'shr.',
+                        'delete': 'del.',
+                        'clean': 'cln.',
+                        'back': 'bk.'
+                    }
+                },
+                'groups_menu': {
+                    'buttons': {
+                        'switch': 'switch',
+                        'edit': 'edit',
+                        'add': 'add',
+                        'sort': 'sort',
+                        'delete': 'delete',
+                        'back': 'back'
+                    },
+                    'buttons_short': {
+                        'switch': 'swt.',
+                        'edit': 'chg.',
+                        'add': 'add',
+                        'sort': 'sort',
+                        'delete': 'del.',
+                        'back': 'bk.'
+                    }
+                },
+                'categories_menu': {
+                    'buttons': {
+                        'edit': 'edit',
+                        'add': 'add',
+                        'sort': 'sort',
+                        'delete': 'delete',
+                        'clean': 'clean',
+                        'back': 'back'
+                    },
+                    'buttons_short': {
+                        'edit': 'chg.',
+                        'add': 'add',
+                        'sort': 'sort',
                         'delete': 'del.',
                         'clean': 'cln.',
                         'back': 'bk.'

@@ -9,7 +9,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
-from bot.business_processes.categories.utils.categories_menu_keyboard import categories_keyboard_builder
+from bot.business_processes.categories.utils.categories_menu_keyboard import categories_menu_keyboard_builder, \
+    categories_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
@@ -52,7 +53,7 @@ class UpdateCategoryStart:
 
     @staticmethod
     async def categories_read_for_update(telegram_user_id: int):
-        keyboard = await categories_keyboard_builder()
+        keyboard = await categories_menu_keyboard_builder(telegram_user_id)
         list_name = await get_lists_detail_api(telegram_user_id)
         list_message_text = f"""Категории списка \n*"{list_name}"*:"""
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=list_message_text,
@@ -66,6 +67,8 @@ class UpdateCategoryStart:
         lambda message:
         any(message.text == list_menu_keyboard_buttons(lang)[button_style]['categories']
             for lang in transl.keys() for button_style in buttons_styles)
+        or any(message.text == categories_menu_keyboard_buttons(lang)[button_style]['edit']
+               for lang in transl.keys() for button_style in buttons_styles)
     )
     async def categories_read_for_update_handler(message: Message):
         telegram_user_id = message.from_user.id

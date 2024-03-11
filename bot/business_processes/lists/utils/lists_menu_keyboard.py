@@ -7,6 +7,7 @@ from bot.translate import transl
 
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
 
+
 def lists_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
     buttons_long = transl[lang]['lists_menu']['buttons']
     buttons_short = transl[lang]['lists_menu']['buttons_short']

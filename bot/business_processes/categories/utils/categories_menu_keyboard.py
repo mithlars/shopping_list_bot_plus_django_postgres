@@ -1,7 +1,11 @@
-from aiogram.types import KeyboardButton
+from typing import Dict
+
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
+from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
 from bot.emoji import emoji
+from bot.translate import transl
 
 """
     classes structure:
@@ -22,99 +26,54 @@ from bot.emoji import emoji
 """
 
 
-# class CategoriesDataProcessing:
-#     """ is accountable for processing data got from Django service """
-#
-#     @staticmethod
-#     async def data_processing(categories: list) -> str:
-#         """ does message-text from list of user's current's list categories list """
-#         message_text = ''
-#         number = 1
-#         for category in categories:
-#             category_name = category['name']
-#             category_description = category.get('description', '')
-#             message_text += f"{number}. {category_name}"
-#             number += 1
-#             if category_description != '' and category_description is not None:
-#                 message_text += f" ({category_description})\n"
-#             else:
-#                 message_text += '\n'
-#         return message_text
-#
-#
-# class CategoriesAPI:
-#     """ is accountable for API-functions to make requests to Django-service """
-#
-#     @staticmethod
-#     @update_last_request_time(django_auth)
-#     async def get_lists_detail_api(telegram_user_id: int) -> str:
-#         """ requests from Django details of users current list for the message """
-#         url = f"{django_address}/lists/detail/"
-#         data = {"telegram_user_id": telegram_user_id}
-#         response = django_auth.session.get(url=url, data=data)
-#         list_text = response.json()['name']
-#         list_description = response.json().get('description', "")
-#         if list_description != "" and list_description is not None:
-#             list_text += f" ({list_description})"
-#         return list_text
-#
-#     @staticmethod
-#     @update_last_request_time(django_auth)
-#     async def get_categories_for_current_list(telegram_user_id: int) -> str:
-#         """ requests from Django list of categories for current user's list """
-#         url = f"{django_address}/categories/"
-#         data = {"telegram_user_id": telegram_user_id}
-#         response = django_auth.session.get(url=url, data=data)
-#         message_text = await CategoriesDataProcessing.data_processing(response.json())
-#         return message_text
-#
-#
-# class CategoriesKeyboards:
-#     """ is accountable for functions which builds keyboards  """
-#
-#     @staticmethod
-async def categories_keyboard_builder():
+def categories_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
+    buttons_long = transl[lang]['categories_menu']['buttons']
+    buttons_short = transl[lang]['categories_menu']['buttons_short']
+    buttons = {
+        'pics': {  # 'pics': ["✏️🗂️", "➕🗂️", "⬆⬇🗂️", '❌🗂️', "🧹🗂️", "↩️📋"],
+            'edit': emoji['edit'] + emoji['categories'],
+            'add': emoji['add'] + emoji['categories'],
+            'sort': emoji['sort'] + emoji['categories'],
+            'delete': emoji['delete'] + emoji['categories'],
+            'clean': emoji['clean'] + emoji['categories'],
+            'back': emoji['back'] + emoji['list']
+        },
+        'text': {  # 'text': ["изменить🗂️", "создать🗂️", "сортировать🗂️", "удалить🗂️", "очистить🗂️", "назад"],
+            'edit': buttons_long['edit'] + emoji['categories'],
+            'add': buttons_long['add'] + emoji['categories'],
+            'sort': buttons_long['sort'] + emoji['categories'],
+            'delete': buttons_long['delete'] + emoji['categories'],
+            'clean': buttons_long['clean'] + emoji['categories'],
+            'back': buttons_long['back'] + emoji['list']
+        },
+        'both': {  # 'both': ["✏️🗂️изм.", "➕🗂️созд.", "⬆⬇сорт.", "❌🗂️удал.", "🧹🗂️очис.", "↩️📋"]
+            'edit': emoji['edit'] + emoji['categories'] + buttons_short['edit'],
+            'add': emoji['add'] + emoji['categories'] + buttons_short['add'],
+            'sort': emoji['sort'] + buttons_short['sort'],
+            'delete': emoji['delete'] + emoji['categories'] + buttons_short['delete'],
+            'clean': emoji['clean'] + emoji['categories'] + buttons_short['clean'],
+            'back': emoji['back'] + emoji['list'] + buttons_short['back']
+        },
+    }
+    return buttons
+
+
+async def categories_menu_keyboard_builder(telegram_user_id: int) -> ReplyKeyboardMarkup:
     """ builds main reply-keyboard for categories menu """
+    options = await get_profiles_options_api(telegram_user_id)
+    lang = options["telegram_language"]
+    buttons = categories_menu_keyboard_buttons(lang)
+    style = options["telegram_buttons_style"]
     builder = ReplyKeyboardBuilder()
-    builder.add(
-        KeyboardButton(text="✏️🗂️"),
-        KeyboardButton(text="➕🗂️"),
-        KeyboardButton(text="⬆⬇🗂️"),
-        KeyboardButton(text=emoji['delete'] + emoji['categories']),
-        KeyboardButton(text="🧹🗂️"),
-        KeyboardButton(text="↩️📋")
-    )
-    builder.adjust(3, 5)
+    for button_text in buttons[style].values():
+        builder.add(KeyboardButton(text=button_text))
+    # builder.add(
+    #     KeyboardButton(text="✏️🗂️"),
+    #     KeyboardButton(text="➕🗂️"),
+    #     KeyboardButton(text="⬆⬇🗂️"),
+    #     KeyboardButton(text=emoji['delete'] + emoji['categories']),
+    #     KeyboardButton(text="🧹🗂️"),
+    #     KeyboardButton(text="↩️📋")
+    # )
+    builder.adjust(3)
     return builder.as_markup(resize_keyboard=True)
-#
-#
-# categories_read_router = Router()
-#
-#
-# class CategoriesRead:
-#     """ Is accountable for handle business-processes start command and for presenting categories options menu """
-#
-#     @staticmethod
-#     async def categories_read_and_menu(telegram_user_id: int):
-#         """ Sends message with list of categories and categories menu keyboard """
-#
-#         #  Sending message with name of user's current list:"
-#         list_name = await CategoriesAPI.get_lists_detail_api(telegram_user_id)
-#         list_text = f"""Категории списка \n*"{list_name}"*:"""
-#         await MyBot.bot.send_message(chat_id=telegram_user_id, text=list_text, parse_mode='Markdown')
-#
-#         #  Sending message with categories list and categories main menu keyboard
-#         keyword = await CategoriesKeyboards.categories_keyboard_builder()
-#         text = await CategoriesAPI.get_categories_for_current_list(telegram_user_id)
-#         await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=keyword)
-#
-#     @staticmethod
-#     @categories_read_router.message((F.text == "🔄🗂️") |
-#                                     (F.text == "🗂️Категории") |
-#                                     (F.text == "🗂️Categories") |
-#                                     (F.text == "🗂️Cat") |
-#                                     (F.text == "🗂️"))
-#     async def categories_read_and_menu_handler(message: Message):
-#         """ is handling request message for categories menu """
-#         telegram_user_id = message.from_user.id
-#         await CategoriesRead.categories_read_and_menu(telegram_user_id)

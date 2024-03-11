@@ -4,8 +4,9 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 from bot.business_processes.categories.category_update import UpdateCategoryStart
+from bot.business_processes.categories.utils.categories_menu_keyboard import categories_menu_keyboard_buttons
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
-from bot.constants import django_address
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.api.django_auth import update_last_request_time, django_auth
 from bot.emoji import emoji
@@ -56,7 +57,11 @@ category_add_router = Router()
 class CategoryAddHandler:
 
     @staticmethod
-    @category_add_router.message(F.text == emoji['add'] + emoji['categories'])
+    @category_add_router.message(
+        lambda message:
+        any(message.text == categories_menu_keyboard_buttons(lang)[button_style]['add']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def add_new_category_handler(message: Message, state: FSMContext):
         telegram_user_id = message.chat.id
         # options = await get_profiles_options_api(telegram_user_id)
