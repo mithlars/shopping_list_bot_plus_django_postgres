@@ -10,7 +10,9 @@ from bot.create_bot import MyBot
 
 from bot.api.django_auth import update_last_request_time, django_auth
 from .lists_read_and_menu import ListsReadAndMenu
-from ...constants import django_address
+from .utils.lists_menu_keyboard import lists_menu_keyboard_buttons
+from ...constants import django_address, buttons_styles
+from ...translate import transl
 
 list_update_router = Router()
 
@@ -59,10 +61,14 @@ class UpdateListStart:
         return text_and_keyboard
 
     @staticmethod
-    @list_update_router.message((F.text == '✏️️📦') |
-                                (F.text == "adit️📦") |
-                                (F.text == "изменить📦")
-                                )
+    @list_update_router.message(
+        lambda message:
+        any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['edit']
+            for lang in transl.keys() for button_style in buttons_styles)
+        # (F.text == '✏️️📦') |
+        # (F.text == "adit️📦") |
+        # (F.text == "изменить📦")
+    )
     async def choose_list_for_update_handler(message: Message):
         telegram_user_id = message.from_user.id
         text_and_keyboard = await UpdateListStart.users_lists_read_api(telegram_user_id)

@@ -99,7 +99,7 @@ class GroupUpdateFMS:
                                      parse_mode='MarkdownV2')
 
     @staticmethod
-    @group_update_router.message(F.text.startswith('✏️🗃️Отмена'))
+    @group_update_router.message(F.text == '✏️🗃️Отмена')
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()

@@ -38,7 +38,7 @@ def categories_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'clean': emoji['clean'] + emoji['categories'],
             'back': emoji['back'] + emoji['list']
         },
-        'text': {  # 'text': ["изменить🗂️", "создать🗂️", "сортировать🗂️", "удалить🗂️", "очистить🗂️", "назад"],
+        'text': {  # 'text': ["изменить🗂️", "создать🗂️", "сортировать🗂️", "удалить🗂️", "очистить🗂️", "назад📋"],
             'edit': buttons_long['edit'] + emoji['categories'],
             'add': buttons_long['add'] + emoji['categories'],
             'sort': buttons_long['sort'] + emoji['categories'],
@@ -46,10 +46,10 @@ def categories_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'clean': buttons_long['clean'] + emoji['categories'],
             'back': buttons_long['back'] + emoji['list']
         },
-        'both': {  # 'both': ["✏️🗂️изм.", "➕🗂️созд.", "⬆⬇сорт.", "❌🗂️удал.", "🧹🗂️очис.", "↩️📋"]
+        'both': {  # 'both': ["✏️🗂️изм.", "➕🗂️созд.", "⬆⬇🗂️сорт.", "❌🗂️удал.", "🧹🗂️очис.", "↩️📋"]
             'edit': emoji['edit'] + emoji['categories'] + buttons_short['edit'],
             'add': emoji['add'] + emoji['categories'] + buttons_short['add'],
-            'sort': emoji['sort'] + buttons_short['sort'],
+            'sort': emoji['sort'] + emoji['categories'] + buttons_short['sort'],
             'delete': emoji['delete'] + emoji['categories'] + buttons_short['delete'],
             'clean': emoji['clean'] + emoji['categories'] + buttons_short['clean'],
             'back': emoji['back'] + emoji['list'] + buttons_short['back']
@@ -67,13 +67,5 @@ async def categories_menu_keyboard_builder(telegram_user_id: int) -> ReplyKeyboa
     builder = ReplyKeyboardBuilder()
     for button_text in buttons[style].values():
         builder.add(KeyboardButton(text=button_text))
-    # builder.add(
-    #     KeyboardButton(text="✏️🗂️"),
-    #     KeyboardButton(text="➕🗂️"),
-    #     KeyboardButton(text="⬆⬇🗂️"),
-    #     KeyboardButton(text=emoji['delete'] + emoji['categories']),
-    #     KeyboardButton(text="🧹🗂️"),
-    #     KeyboardButton(text="↩️📋")
-    # )
     builder.adjust(3)
     return builder.as_markup(resize_keyboard=True)

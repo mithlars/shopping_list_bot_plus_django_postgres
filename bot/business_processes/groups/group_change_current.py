@@ -5,7 +5,7 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKe
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.groups.utils.groups_menu_keyboard import groups_main_menu_keyboard_builder
+from bot.business_processes.groups.utils.groups_menu_keyboard import groups_menu_keyboard_builder
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
@@ -61,7 +61,7 @@ class GroupChangeCurrentStart:
     async def change_current_group(telegram_user_id: int):
         list_name = await get_lists_detail_api(telegram_user_id)
         list_message_name = f"Группы списка \n\"{list_name}\":"
-        keyboard = await groups_main_menu_keyboard_builder()
+        keyboard = await groups_menu_keyboard_builder(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=list_message_name, reply_markup=keyboard)
 
         current_group_id = await GroupChangeCurrentStart.get_current_group(telegram_user_id)

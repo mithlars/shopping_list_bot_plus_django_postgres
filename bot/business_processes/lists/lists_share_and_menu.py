@@ -8,9 +8,12 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import update_last_request_time, django_auth
+from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
-from bot.constants import django_address
+from bot.business_processes.lists.utils.share_menu_keyboard import share_menu_keyboard, share_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.translate import transl
 
 lists_share_router = Router()
 
@@ -58,22 +61,9 @@ class ListsShareStart:
         return message_text, keyboard
 
     @staticmethod
-    async def share_main_keyboard() -> ReplyKeyboardMarkup:
-        builder = ReplyKeyboardBuilder()
-        button_1 = KeyboardButton(text="Доступ к списку")
-        button_2 = KeyboardButton(text="Окружение")
-        button_3 = KeyboardButton(text="Добавь меня")
-        button_4 = KeyboardButton(text="↩️📦")
-        button_5 = KeyboardButton(text="↩️📋")
-        builder.add(button_1, button_2, button_3, button_4, button_5)
-        builder.adjust(3, 2)
-        keyboard = builder.as_markup(resize_keyboard=True)
-        return keyboard
-
-    @staticmethod
     async def lists_share_start(telegram_user_id: int):
         message_1_text = "К какому списку Вы хотите дать доступ?:"
-        menu_keyboard = await ListsShareStart.share_main_keyboard()
+        menu_keyboard = await share_menu_keyboard(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_1_text, reply_markup=menu_keyboard)
 
         message_2_text, inline_keyboard = await ListsShareStart.lists_to_share_api(telegram_user_id)
@@ -81,9 +71,13 @@ class ListsShareStart:
                                      reply_markup=inline_keyboard, parse_mode="Markdown")
 
     @staticmethod
-    @lists_share_router.message((F.text == "👨‍👦‍👦‍Sha") |
-                                (F.text == "👨‍👦‍👦‍") |
-                                (F.text == "доступ"))
+    @lists_share_router.message(
+        lambda message:
+        any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['share']
+            for lang in transl.keys() for button_style in buttons_styles)
+        or any(message.text == share_menu_keyboard_buttons(lang)[button_style]['access']
+               for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def lists_share_start_handler(message: Message):
         telegram_user_id = message.from_user.id
         await ListsShareStart.lists_share_start(telegram_user_id)

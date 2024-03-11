@@ -7,9 +7,11 @@ from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.lists.lists_read_and_menu import ListsReadAndMenu
+from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
-from bot.constants import django_address
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.translate import transl
 
 list_delete_router = Router()
 
@@ -128,7 +130,11 @@ class ListDeleteStart:
         return text_lists, delete_keyboard
 
     @staticmethod
-    @list_delete_router.message(F.text == '📦❌')
+    @list_delete_router.message(
+        lambda message:
+        any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['delete']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def list_delete_start_handler(message: Message):
         """
                 Requests from get_lists_and_delete_keyboard_api function message text with listing of lists

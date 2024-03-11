@@ -4,9 +4,12 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 from bot.business_processes.groups.group_change_current import GroupChangeCurrentStart
-from bot.constants import django_address
+from bot.business_processes.groups.utils.groups_menu_keyboard import groups_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.api.django_auth import update_last_request_time, django_auth
+from bot.translate import transl
+
 
 # from bot.business_processes.groups.utils.groups_menu_keyboard import GroupsRead
 
@@ -53,7 +56,11 @@ group_add_router = Router()
 class GroupAdd:
 
     @staticmethod
-    @group_add_router.message(F.text == "➕🗃️")
+    @group_add_router.message(
+        lambda message:
+        any(message.text == groups_menu_keyboard_buttons(lang)[button_style]['add']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def add_new_group_handler(message: Message, state: FSMContext):
         kb = [[KeyboardButton(text="➕🗃️Отмена")]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)

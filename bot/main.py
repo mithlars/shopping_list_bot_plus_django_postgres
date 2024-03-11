@@ -12,7 +12,6 @@ from bot.business_processes.groups.group_delete import group_delete_router
 from bot.business_processes.groups.group_line_up import group_line_up_router
 from bot.business_processes.groups.group_edit import group_edit_router
 from bot.business_processes.groups.group_update import group_update_router
-from bot.business_processes.groups.utils.groups_menu_keyboard import groups_main_menu_router
 from bot.business_processes.lists.list_change_current import list_change_current_router
 from bot.business_processes.lists.list_create import list_create_router
 from bot.business_processes.lists.list_delete import list_delete_router
@@ -69,7 +68,6 @@ async def main():
         list_delete_router,
         lists_share_router,
 
-        groups_main_menu_router,
         group_change_current_router,
         group_add_router,
         group_delete_router,

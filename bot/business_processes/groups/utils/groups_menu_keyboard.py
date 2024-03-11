@@ -1,91 +1,56 @@
+from typing import Dict
+
 from aiogram import Router
-from aiogram.types import KeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-# from bot.api.django_auth import django_auth, update_last_request_time
-# from bot.create_bot import MyBot
+from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
+from bot.emoji import emoji
+from bot.translate import transl
 
 
-# class GroupsDataProcessing:
-#
-#     @staticmethod
-#     async def data_processing(groups_data: list) -> str:
-#         message_text = ''
-#         number = 1
-#         for group in groups_data:
-#             group_name = group['name']
-#             group_description = group.get('description', '')
-#             message_text += f"{number}. {group_name}"
-#             number += 1
-#             if group_description != '':
-#                 message_text += f" ({group_description})\n"
-#             else:
-#                 message_text += '\n'
-#         if message_text == "":
-#             message_text += "Ни одной категории пока не создано."
-#         return message_text
-#
-#
-# class GroupsAPI:
-#
-#     @staticmethod
-#     @update_last_request_time(django_auth)
-#     async def get_lists_detail_api(telegram_user_id: int) -> str:
-#         url = f"{django_address}/lists/detail/"
-#         data = {"telegram_user_id": telegram_user_id}
-#         response = django_auth.session.get(url=url, data=data)
-#         list_name = response.json()['name']
-#         return list_name
-#
-#     @staticmethod
-#     @update_last_request_time(django_auth)
-#     async def get_groups_for_current_list_api(telegram_user_id: int) -> str:
-#         url = f"{django_address}/groups/"
-#         data = {"telegram_user_id": telegram_user_id}
-#         response = django_auth.session.get(url=url, data=data)
-#         message_text = await GroupsDataProcessing.data_processing(response.json())
-#         return message_text
-#
-#
-# class GroupsMainMenuKeyboard:
-#
-#     @staticmethod
-async def groups_main_menu_keyboard_builder():
+def groups_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
+    buttons_long = transl[lang]['groups_menu']['buttons']
+    buttons_short = transl[lang]['groups_menu']['buttons_short']
+    buttons = {
+        'pics': {  # 'pics': ["🔀🗃️", "✏️🗃️", "➕🗃️", "⬆⬇🗃️", "❌️🗃️", "↩️📋"],
+            'switch': emoji['switch'] + emoji['groups'],
+            'edit':   emoji['edit'] + emoji['groups'],
+            'add':    emoji['add'] + emoji['groups'],
+            # 'sort':   emoji['sort'] + emoji['groups'],
+            'delete': emoji['delete'] + emoji['groups'],
+            'back':   emoji['back'] + emoji['list']
+        },
+        'text': {  # 'text': ["изменить🗃️", "создать🗃️", "сортировать🗃️", "удалить🗃️", "назад📋"],
+            'switch': buttons_long['switch'] + emoji['groups'],
+            'edit':   buttons_long['edit'] + emoji['groups'],
+            'add':    buttons_long['add'] + emoji['groups'],
+            # 'sort':   buttons_long['sort'] + emoji['groups'],
+            'delete': buttons_long['delete'] + emoji['groups'],
+            'back':   buttons_long['back'] + emoji['list']
+        },
+        'both': {  # 'both': ["✏️🗃️изм.", "➕🗃️созд.", "⬆⬇🗃️сорт.", "❌🗃️удал.", "↩️📋"]
+            'switch': emoji['switch'] + emoji['groups'] + buttons_short['switch'],
+            'edit':   emoji['edit'] + emoji['groups'] + buttons_short['edit'],
+            'add':    emoji['add'] + emoji['groups'] + buttons_short['add'],
+            # 'sort':   emoji['sort'] + emoji['groups'] + buttons_short['sort'],
+            'delete': emoji['delete'] + emoji['groups'] + buttons_short['delete'],
+            'back':   emoji['back'] + emoji['list'] + buttons_short['back']
+        },
+    }  # TODO: Доделать сортировку групп
+    return buttons
+
+
+async def groups_menu_keyboard_builder(telegram_user_id: int) -> ReplyKeyboardMarkup:
+    options = await get_profiles_options_api(telegram_user_id)
+    lang = options["telegram_language"]
+    buttons = groups_menu_keyboard_buttons(lang)
+    style = options["telegram_buttons_style"]
     builder = ReplyKeyboardBuilder()
-    builder.add(
-        KeyboardButton(text="🔀🗃️"),
-        KeyboardButton(text="✏️🗃️"),
-        KeyboardButton(text="➕🗃️"),
-        # KeyboardButton(text="⬆⬇🗃️"),
-        KeyboardButton(text="❌️🗃️"),
-        KeyboardButton(text="↩️📋")  # ,Назад
-    )
-    builder.adjust(6)
+    for button_text in buttons[style].values():
+        builder.add(KeyboardButton(text=button_text))
+    if style == list(buttons.keys())[0]:
+        builder.adjust(6)
+    else:
+        builder.adjust(3)
     return builder.as_markup(resize_keyboard=True)
-
-
-groups_main_menu_router = Router()
-
-
-# class GroupsRead:
-#
-#     @staticmethod
-#     async def groups_read_and_main_menu(telegram_user_id: int):
-#         #  Отправка сообщения "Список {list_name}:"
-#         list_name = await GroupsAPI.get_lists_detail_api(telegram_user_id)
-#         text_list_name = f"Группы списка \n\"{list_name}\":"
-#         keyboard = await GroupsMainMenuKeyboard.groups_main_menu_keyboard_builder()
-#         await MyBot.bot.send_message(chat_id=telegram_user_id, text=text_list_name, reply_markup=keyboard)
-#         message_text = await GroupsAPI.get_groups_for_current_list_api(telegram_user_id)
-#         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
-#
-#     @staticmethod
-#     @groups_main_menu_router.message(
-#         (F.text.startswith("🗃️Gr")) |
-#         (F.text.startswith("🗃️")) |
-#         (F.text.startswith("🔄🗃️")) |
-#         (F.text.startswith("🗃️Groups"))
-#     )
-#     async def groups_read_and_main_menu_header(message: Message):
-#         telegram_user_id = message.from_user.id
-#         await GroupsRead.groups_read_and_main_menu(telegram_user_id)

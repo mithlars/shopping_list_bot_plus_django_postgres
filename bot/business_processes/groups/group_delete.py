@@ -6,11 +6,13 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.groups.utils.groups_menu_keyboard import groups_main_menu_keyboard_builder
+from bot.business_processes.groups.utils.groups_menu_keyboard import groups_menu_keyboard_builder, \
+    groups_menu_keyboard_buttons
 from .group_change_current import GroupChangeCurrentStart
 from ..lists.utils.lits_details_api import get_lists_detail_api
-from ...constants import django_address
+from ...constants import django_address, buttons_styles
 from ...create_bot import MyBot
+from ...translate import transl
 
 
 class GroupDeleteDataProcessing:
@@ -92,7 +94,7 @@ class GroupDelete:
 
         list_message_name = (f"""Удаление категорий списка *"{list_name}"*\n"""
                              f"""(можно удалить только *пустые категории*):""")
-        main_keyboard = await groups_main_menu_keyboard_builder()
+        main_keyboard = await groups_menu_keyboard_builder(telegram_user_id)
         #  Отправка сообщения "Список {list_name}:" с выводом основной клавиатуры:
         await MyBot.bot.send_message(chat_id=telegram_user_id,
                                      text=list_message_name,
@@ -106,7 +108,11 @@ class GroupDelete:
                                      parse_mode='Markdown')
 
     @staticmethod
-    @group_delete_router.message(F.text == "❌️🗃️")
+    @group_delete_router.message(
+        lambda message:
+        any(message.text == groups_menu_keyboard_buttons(lang)[button_style]['delete']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def group_delete_start_handler(message: Message):
         """ Handler-функция для вывода списка с клавиатурой для выбора группу для удаления """
         await GroupDelete.group_delete(message.from_user.id)

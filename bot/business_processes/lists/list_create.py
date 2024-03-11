@@ -8,7 +8,9 @@ from bot.create_bot import MyBot
 from bot.api.django_auth import update_last_request_time, django_auth
 
 from .lists_read_and_menu import ListsReadAndMenu
-from ...constants import django_address
+from .utils.lists_menu_keyboard import lists_menu_keyboard_buttons
+from ...constants import django_address, buttons_styles
+from ...translate import transl
 
 
 class ListCreateAPI:
@@ -37,8 +39,11 @@ list_create_router = Router()
 class ListCreateHandler:
 
     @staticmethod
-    @list_create_router.message((F.text == "➕📦") |
-                                (F.text == "создать📦"))
+    @list_create_router.message(
+        lambda message:
+        any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['add']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def create_new_list_handler(message: Message, state: FSMContext):
         kb = [[KeyboardButton(text="➕📦Отмена")]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)

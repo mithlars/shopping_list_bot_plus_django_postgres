@@ -8,6 +8,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.lists.lists_read_and_menu import ListsReadAndMenu
 from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard, lists_menu_keyboard_buttons
+from bot.business_processes.lists.utils.share_menu_keyboard import share_menu_keyboard_buttons
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
@@ -76,6 +77,10 @@ class ListChangeCurrent:
         lambda message:
         any(message.text == list_menu_keyboard_buttons(lang)[button_style]['lists']
             for lang in transl.keys() for button_style in buttons_styles)
+        or any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['switch']
+               for lang in transl.keys() for button_style in buttons_styles)
+        or any(message.text == share_menu_keyboard_buttons(lang)[button_style]['back_to_lists']
+               for lang in transl.keys() for button_style in buttons_styles)
     )
     async def change_current_list_handler(message: Message):
         telegram_user_id = message.from_user.id

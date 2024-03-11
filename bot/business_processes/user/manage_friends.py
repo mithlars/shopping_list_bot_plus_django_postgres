@@ -13,7 +13,9 @@ from bot.api.django_auth import django_auth, update_last_request_time
 from bot.create_bot import MyBot
 
 from ..lists.lists_share_and_menu import ListsShareStart
-from ...constants import django_address
+from ..lists.utils.share_menu_keyboard import share_menu_keyboard_buttons
+from ...constants import django_address, buttons_styles
+from ...translate import transl
 
 manage_friends_router = Router()
 
@@ -57,7 +59,12 @@ class FriendsList:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
     @staticmethod
-    @manage_friends_router.message(F.text == "Окружение")
+    @manage_friends_router.message(
+        lambda message:
+        any(message.text == share_menu_keyboard_buttons(lang)[button_style]['surrounding']
+            for lang in transl.keys() for button_style in buttons_styles)
+        # F.text == "Окружение"
+    )
     async def friends_list_handler(message: Message):
         telegram_user_id = message.from_user.id
         await FriendsList.friends_list(telegram_user_id)
@@ -203,7 +210,12 @@ class AddFriendByTelegramID:
 class AddMeToFriends:
 
     @staticmethod
-    @manage_friends_router.message(F.text == "Добавь меня")
+    @manage_friends_router.message(
+        lambda message:
+        any(message.text == share_menu_keyboard_buttons(lang)[button_style]['add_me']
+            for lang in transl.keys() for button_style in buttons_styles)
+        # F.text == "Добавь меня"
+    )
     async def add_me_to_friends_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
         telegram_user_firstname = callback.from_user.first_name
