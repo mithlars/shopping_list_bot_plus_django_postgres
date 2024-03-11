@@ -11,10 +11,12 @@ from requests import Response
 
 from bot.business_processes.categories.utils.categories_menu_keyboard import categories_keyboard_builder
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
-from bot.constants import django_address
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 
 from bot.api.django_auth import update_last_request_time, django_auth
+from bot.translate import transl
 
 category_update_router = Router()
 
@@ -60,15 +62,14 @@ class UpdateCategoryStart:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
     @staticmethod
-    @category_update_router.message((F.text == '✏️🗂️') |
-                                    (F.text == "🗂️Категории") |
-                                    (F.text == "🗂️Categories") |
-                                    (F.text == "🗂️Cat") |
-                                    (F.text == "🗂️"))  # TODO: Сделать основным интерфейсом меню категорий
+    @category_update_router.message(
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['categories']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def categories_read_for_update_handler(message: Message):
         telegram_user_id = message.from_user.id
         await UpdateCategoryStart.categories_read_for_update(telegram_user_id)
-
 
 
 class StatesUpdateCategory(StatesGroup):

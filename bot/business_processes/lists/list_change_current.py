@@ -7,9 +7,11 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.lists.lists_read_and_menu import ListsReadAndMenu
-from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard
-from bot.constants import django_address
+from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard, lists_menu_keyboard_buttons
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.translate import transl
 
 
 class ListChangeCurrentDataProcessing:
@@ -70,15 +72,11 @@ list_change_current_router = Router()
 class ListChangeCurrent:
 
     @staticmethod
-    @list_change_current_router.message((F.text == "🔀📦") |
-                                        (F.text == "switch📦") |
-                                        (F.text == "📦Lists") |
-                                        (F.text == "📦Списки") |
-                                        (F.text == "🔄📦") |
-                                        (F.text == "сменить📦") |
-                                        (F.text == "📦Lis") |
-                                        (F.text == "📦") |
-                                        (F.text == "↩️📦"))
+    @list_change_current_router.message(
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['lists']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def change_current_list_handler(message: Message):
         telegram_user_id = message.from_user.id
         message_text = "Ваши списки:\n"

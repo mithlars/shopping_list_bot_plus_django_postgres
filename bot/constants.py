@@ -13,3 +13,5 @@ start_welcome_message = "Welcome to the bot"
 
 DJANGO_USERNAME = os.getenv("DJANGO_USERNAME")
 DJANGO_USER_PASSWORD = os.getenv("DJANGO_USER_PASSWORD")
+
+buttons_styles = ['pics', 'text', 'both']

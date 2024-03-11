@@ -11,8 +11,10 @@ from typing_extensions import Tuple
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.purchases.list_read_and_menu import ListRead
-from bot.constants import django_address
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.translate import transl
 
 purchase_update_router = Router()
 
@@ -60,7 +62,12 @@ class PurchaseUpdateStart:
         return message_text, keyboard
 
     @staticmethod
-    @purchase_update_router.message(F.text == '✏️')
+    @purchase_update_router.message(
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['edit']
+            for lang in transl.keys() for button_style in buttons_styles)
+        # F.text == '✏️'
+    )
     async def categories_read_for_update_handler(message: Message):
         telegram_user_id = message.from_user.id
         message_text, keyboard = await PurchaseUpdateStart.get_list_api(telegram_user_id)

@@ -7,8 +7,11 @@ from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.purchases.list_read_and_menu import ListRead
-from bot.constants import django_address
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.emoji import emoji
+from bot.translate import transl
 
 purchase_categorize_one_router = Router()
 
@@ -62,7 +65,11 @@ class PurchaseCategorizeOneStart:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
     @staticmethod
-    @purchase_categorize_one_router.message(F.text == "➡️🗂️")
+    @purchase_categorize_one_router.message(
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['to_category']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def categorize_one_start_handler(message: Message):
         telegram_user_id = message.from_user.id
         await PurchaseCategorizeOneStart.categorize_choice(telegram_user_id)

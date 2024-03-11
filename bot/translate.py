@@ -55,7 +55,7 @@ transl = {
                         'reload': 'Обновить',
                         'edit': 'Изменить',
                         'to_category': 'В категорию',
-                        'out_category': 'Из категории'
+                        'from_category': 'Из категории'
                     },
                     'buttons_short': {
                         'groups': 'Гр.',
@@ -65,7 +65,7 @@ transl = {
                         'reload': 'Обн.',
                         'edit': 'Изм.',
                         'to_category': 'В кат.',
-                        'out_category': 'Из кат.'
+                        'from_category': 'Из кат.'
                     }
                 },
                 'lists_menu': {
@@ -141,19 +141,19 @@ transl = {
                         'lists': 'Lists',
                         'options': 'Options',
                         'reload': 'Reload',
-                        'edit': 'Edit',
+                        'edit': 'Change',
                         'to_category': 'To category',
-                        'out_category': 'From category'
+                        'from_category': 'From category'
                     },
                     'buttons_short': {
                         'groups': 'Gr.',
                         'categories': 'Cat.',
                         'lists': 'Lst.',
                         'options': 'Opt.',
-                        'reload': 'Rel.',
+                        'reload': 'Rld.',
                         'edit': 'Chg.',
                         'to_category': 'To cat.',
-                        'out_category': 'From cat.'
+                        'from_category': 'From cat.'
                     }
                 },
                 'lists_menu': {

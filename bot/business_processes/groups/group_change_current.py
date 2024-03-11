@@ -7,9 +7,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.groups.utils.groups_menu_keyboard import groups_main_menu_keyboard_builder
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
-from bot.constants import django_address
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
-
+from bot.translate import transl
 
 group_change_current_router = Router()
 
@@ -72,11 +73,10 @@ class GroupChangeCurrentStart:
 
     @staticmethod
     @group_change_current_router.message(
-        (F.text.startswith("🗃️Gr")) |
-        (F.text.startswith("🗃️")) |
-        (F.text.startswith("🔀🗃️")) |
-        (F.text.startswith("🗃️Groups"))
-    )  # (F.text == "🔀🗃️")
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['groups']
+            for lang in transl.keys() for button_style in buttons_styles)
+    )
     async def change_current_group_handler(message: Message):
         telegram_user_id = message.from_user.id
         await GroupChangeCurrentStart.change_current_group(telegram_user_id)

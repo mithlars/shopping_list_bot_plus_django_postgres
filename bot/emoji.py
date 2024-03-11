@@ -21,6 +21,7 @@ emoji = {
     'lists': '📦',
     'list': '📋',
     'categories': '🗂️',
+    'groups': '🗃️',
     'switch': '🔀',
     'edit': '✏️️',
     'add': '➕',
@@ -28,8 +29,10 @@ emoji = {
     'delete': '❌',
     'sort': '⬆⬇',
     'clean': '🧹',
+    'options': '🛠️',
     'back': '↩️',
     'reload': '🔄',
     'on': '✅',
-    'off': '⬜'
+    'off': '⬜',
+    'right': '➡️'
 }

@@ -6,7 +6,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
-from bot.constants import django_address
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
+from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.emoji import emoji
 from bot.translate import transl
@@ -97,7 +98,11 @@ class ShowOptionsMenu:
         return message_text, keyboard
 
     @staticmethod
-    @options_router.message(F.text == "🛠️")
+    @options_router.message(
+        lambda message:
+        any(message.text == list_menu_keyboard_buttons(lang)[button_style]['options']
+            for lang in transl.keys() for button_style in buttons_styles)
+        )
     async def options_menu_handler(message: Message):
         telegram_user_id = message.from_user.id
         options = await get_profiles_options_api(telegram_user_id)

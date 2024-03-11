@@ -6,6 +6,7 @@ from requests import Response
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.categories.category_update import UpdateCategoryStart
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
+from bot.constants import django_address
 from bot.create_bot import MyBot
 from bot.emoji import emoji
 from bot.translate import transl
