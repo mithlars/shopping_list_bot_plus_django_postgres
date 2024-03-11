@@ -26,10 +26,22 @@ if [ "$SUBNET" != "172.18.0.0/16" ]; then
   docker network create --subnet=172.18.0.0/16 shopping_list_net
 fi
 
+# Останавливаем контейнеры:
+docker stop bot django postgres
+# Удаляем контейнеры:
+docker rm bot django postgres
+# Удаляем образы:
+docker image rm shopping_list_bot shopping_list_django:latest
+
+# Переходим в папку в которой хранится папка проекта:
 cd /home/django_bot
+# Удаляем старую версию кода проекта:
 rm -rf ./*
+# Загружаем последнюю версию кода проекта:
 git clone https://github.com/mithlars/shopping_list_bot_plus_django_postgres
 
+# Переходим в папку проекта:
 cd shopping_list_bot_plus_django_postgres
+# Запускаем сборку образов и запуск контейнеров:
 docker-compose up -d
 "@
