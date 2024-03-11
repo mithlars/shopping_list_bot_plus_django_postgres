@@ -6,6 +6,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
 from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
+from bot.business_processes.lists.utils.share_menu_keyboard import share_menu_keyboard_buttons
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_builder, \
     list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
@@ -89,6 +90,8 @@ class ListRead:
         any(message.text == list_menu_keyboard_buttons(lang)[button_style]['reload']
             for lang in transl.keys() for button_style in buttons_styles)
         or any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['back']
+               for lang in transl.keys() for button_style in buttons_styles)
+        or any(message.text == share_menu_keyboard_buttons(lang)[button_style]['back']
                for lang in transl.keys() for button_style in buttons_styles)
     )
     async def list_of_purchases_handler(message: types.Message):
