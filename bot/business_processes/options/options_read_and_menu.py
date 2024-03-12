@@ -26,8 +26,14 @@ class ShowOptionsMenu:
     async def language_switch_menu(language: str) -> Tuple[str, InlineKeyboardMarkup]:
         """ function to switch language """
         # TODO: Переделать. Сделать так, чтобы список языков подтягивался автоматически для всей функции
-        message_text_list = ["Выберите язык:", "1. 'bel', 'Беларуская'", "2. 'en', 'English'", "3. 'hy', 'Հայերեն'",
-                             "4. 'ru', 'Русски'", "5. 'uk', 'Українська'"]
+        message_text_list = [
+            "Выберите язык:",
+            "1. 'bel', 'Беларуская'",
+            "2. 'en', 'English'",
+            "3. 'hy', 'Հայերեն'",
+            "4. 'ru', 'Русски'",
+            "5. 'uk', 'Українська'"
+        ]
         if language == "bel":
             message_text_list[1] = f"*{message_text_list[1]}*"
         elif language == 'en':
@@ -42,11 +48,11 @@ class ShowOptionsMenu:
 
         builder = InlineKeyboardBuilder()
         builder.add(
-            InlineKeyboardButton(text="1", callback_data="switch_language bel"),
+            # InlineKeyboardButton(text="1", callback_data="switch_language bel"),
             InlineKeyboardButton(text="2", callback_data="switch_language en"),
-            InlineKeyboardButton(text="3", callback_data="switch_language hy"),
+            # InlineKeyboardButton(text="3", callback_data="switch_language hy"),
             InlineKeyboardButton(text="4", callback_data="switch_language ru"),
-            InlineKeyboardButton(text="5", callback_data="switch_language uk")
+            # InlineKeyboardButton(text="5", callback_data="switch_language uk")
         )
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
@@ -118,9 +124,9 @@ class ShowOptionsMenu:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
         # Language:
-        # message_text, keyboard = await ShowOptionsMenu.language_switch_menu(options['telegram_language'])
-        # await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text,
-        #                              reply_markup=keyboard, parse_mode='Markdown')
+        message_text, keyboard = await ShowOptionsMenu.language_switch_menu(options['telegram_language'])
+        await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text,
+                                     reply_markup=keyboard, parse_mode='Markdown')
 
 
 class SwitchOptions:
