@@ -61,7 +61,6 @@ urlpatterns = [
     path('categories/update/', CategoryDetailView.as_view(), name='update_category'),
     path('categories/get_blank/', GetBlankCategoryView.as_view(), name='get_blank_category'),
     path('categories/purify/', CategoryPurifyView.as_view(), name='category_purify'),
-    # path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/purchases_update/', CategoryPurchasesUpdateView.as_view(), name='category-update-purchases'),
     path('categories/delete/', CategoryDetailView.as_view(), name='delete_category'),
 

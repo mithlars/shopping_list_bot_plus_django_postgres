@@ -8,6 +8,7 @@ from requests import Response
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.categories.utils.categories_menu_keyboard import categories_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
+from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.emoji import emoji
@@ -38,9 +39,12 @@ class CategoryPurifyStart:
 
     @staticmethod
     @update_last_request_time(django_auth)
-    async def categories_for_purifying_api(telegram_user_id: int) -> Tuple[str, InlineKeyboardMarkup]:
-        list_name = await get_lists_detail_api(telegram_user_id)
-        message_text = "Какую категорию из списка \"{list_name}\" Вы хотите очистить?\n".format(list_name=list_name)
+    async def categories_for_purifying_api(telegram_user_id: int, lang: str) -> Tuple[str, InlineKeyboardMarkup]:
+        purify_tr = transl[lang]['categories']['purify']
+        message_text = "{purify_tr_1} \"{list_name}\" {purify_tr_2}\n".format(
+            list_name=await get_lists_detail_api(telegram_user_id),
+            purify_tr_1=purify_tr['which_cat_purify_1'],
+            purify_tr_2=purify_tr['which_cat_purify_2'])
         url = f'{django_address}/categories/'
         data = {"telegram_user_id": telegram_user_id}
         request = django_auth.session.get(url=url, data=data)
@@ -50,7 +54,9 @@ class CategoryPurifyStart:
 
     @staticmethod
     async def category_purify_start(telegram_user_id: int):
-        message_text, purify_keyboard = await CategoryPurifyStart.categories_for_purifying_api(telegram_user_id)
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
+        message_text, purify_keyboard = await CategoryPurifyStart.categories_for_purifying_api(telegram_user_id, lang)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=purify_keyboard)
 
     @staticmethod
@@ -67,9 +73,9 @@ class CategoryPurifyStart:
 class CategoryPurifyDecision:
 
     @staticmethod
-    async def category_data_processing(category_data: dict) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = (f"Вы уверены, что хотите удалить позиции категории?\n"
-                        f"____{category_data['name']}\n")
+    async def category_data_processing(category_data: dict, lang: str) -> Tuple[str, InlineKeyboardMarkup]:
+        purify_tr = transl[lang]['categories']['purify']
+        message_text = f"{purify_tr['sure_delete_all_q']}\n____{category_data['name']}\n"
         number = 1
         for purchase in category_data['purchases']:
             message_text += f"{number}. {purchase['name']}"
@@ -79,24 +85,25 @@ class CategoryPurifyDecision:
                 message_text += '\n'
 
         builder = InlineKeyboardBuilder()
-        builder.add(InlineKeyboardButton(text="Да, я хочу удалить позиции этой категории!",
-                                         callback_data=f"category_purify_decision OK {category_data['id']}"))
-        builder.add(InlineKeyboardButton(text="Нет, я передумал удалять позиции категории!",
-                                         callback_data=f"category_purify_decision Cancel {category_data['id']}"))
+        builder.add(InlineKeyboardButton(text=purify_tr['i_am_sure'],
+                                         callback_data=f"category_purify_decision OK {category_data['id']} {lang}"))
+        builder.add(InlineKeyboardButton(text=purify_tr['no_i_chged_mind'],
+                                         callback_data=f"category_purify_decision Cancel {category_data['id']} {lang}"))
         builder.adjust(1)
         purify_decision_keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, purify_decision_keyboard
 
     @staticmethod
     @update_last_request_time(django_auth)
-    async def category_purify_content_api(telegram_user_id: int, category_id: int) -> Tuple[str, InlineKeyboardMarkup]:
+    async def category_purify_content_api(telegram_user_id: int, category_id: int, lang: str
+                                          ) -> Tuple[str, InlineKeyboardMarkup]:
         url = f'{django_address}/categories/get_one/'
         data = {
             "telegram_user_id": telegram_user_id,
             "category_id": category_id
         }
         response = django_auth.session.get(url=url, data=data)
-        message_text, decision_keyboard = await CategoryPurifyDecision.category_data_processing(response.json())
+        message_text, decision_keyboard = await CategoryPurifyDecision.category_data_processing(response.json(), lang)
         return message_text, decision_keyboard
 
     @staticmethod
@@ -104,8 +111,10 @@ class CategoryPurifyDecision:
     async def category_purify_decision_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
         category_id = int(callback.data.split(' ')[1])
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
         message_text, decision_keyboard = \
-            await CategoryPurifyDecision.category_purify_content_api(telegram_user_id, category_id)
+            await CategoryPurifyDecision.category_purify_content_api(telegram_user_id, category_id, lang)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=decision_keyboard)
 
 
@@ -129,10 +138,10 @@ class CategoryPurify:
     @category_purify_router.callback_query(lambda c: c.data and c.data.startswith('category_purify_decision'))
     async def category_purify_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
-        decision, category_id = callback.data.split(' ')[1:]
+        decision, category_id, lang = callback.data.split(' ')[1:]
 
         if decision == "Cancel":
-            text = "OK"
+            text = transl[lang]['vocabulary']['ok']
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
         else:
@@ -143,7 +152,7 @@ class CategoryPurify:
                 await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
             elif response.status_code != 200:
-                text = "Что-то пошло не так..."
+                text = transl[lang]['errors']['smt_rong']
                 await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
         await CategoryPurifyStart.category_purify_start(telegram_user_id)

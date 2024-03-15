@@ -13,34 +13,34 @@ def list_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
     buttons_short = transl[lang]['list_menu']['buttons_short']
     buttons = {
         'pics': {  # ["🔄📋", "✏️📋️", "➡️📁", "📁➡️", "🗃️", "🗂️", "📦", "🛠️"],
-            'reload': emoji['reload'] + emoji['list'],
-            'edit': emoji['edit'] + emoji['list'],
-            'to_category': emoji['right'] + emoji['categories'],
+            'reload':        emoji['reload'] + emoji['list'],
+            'edit':          emoji['edit'] + emoji['list'],
+            'to_category':   emoji['right'] + emoji['categories'],
             'from_category': emoji['categories'] + emoji['right'],
-            'groups': emoji['groups'],
-            'categories': emoji['categories'],
-            'lists': emoji['lists'],
-            'options': emoji['options']
+            'groups':        emoji['groups'],
+            'categories':    emoji['categories'],
+            'lists':         emoji['lists'],
+            'options':       emoji['options']
         },
         'text': {  # ["reload📋", "edit️📋", "to category", "from category", "Groups", "Categories", "Lists", "Options"],
-            'reload': buttons_long['reload'] + emoji['list'],
-            'edit': buttons_long['edit'] + emoji['list'],
-            'to_category': buttons_long['to_category'],
+            'reload':        buttons_long['reload'] + emoji['list'],
+            'edit':          buttons_long['edit'] + emoji['list'],
+            'to_category':   buttons_long['to_category'],
             'from_category': buttons_long['from_category'],
-            'groups': buttons_long['groups'],
-            'categories': buttons_long['categories'],
-            'lists': buttons_long['lists'],
-            'options': buttons_long['options']
+            'groups':        buttons_long['groups'],
+            'categories':    buttons_long['categories'],
+            'lists':         buttons_long['lists'],
+            'options':       buttons_long['options']
         },
         'both': {  # ["🔄📋rld", "✏️📋️chg", "➡️📁ToCat", "📁➡️FrCat", "🗃️Gr.", "🗂️Cats", "📦Lists", "🛠️Opt."]
-            'reload': emoji['reload'] + emoji['list'] + buttons_short['reload'],
-            'edit': emoji['edit'] + emoji['list'] + buttons_short['edit'],
-            'to_category': emoji['right'] + emoji['categories'] + buttons_short['to_category'],
+            'reload':        emoji['reload'] + emoji['list'] + buttons_short['reload'],
+            'edit':          emoji['edit'] + emoji['list'] + buttons_short['edit'],
+            'to_category':   emoji['right'] + emoji['categories'] + buttons_short['to_category'],
             'from_category': emoji['categories'] + emoji['right'] + buttons_short['from_category'],
-            'groups': emoji['groups'] + buttons_short['groups'],
-            'categories': emoji['categories'] + buttons_short['categories'],
-            'lists': emoji['lists'] + buttons_short['lists'],
-            'options': emoji['options'] + buttons_short['options']
+            'groups':        emoji['groups'] + buttons_short['groups'],
+            'categories':    emoji['categories'] + buttons_short['categories'],
+            'lists':         emoji['lists'] + buttons_short['lists'],
+            'options':       emoji['options'] + buttons_short['options']
         },
     }
     return buttons

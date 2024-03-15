@@ -100,9 +100,8 @@ class CategoriesDelete:
                 Функция получает от функции get_hole_list тексты сообщений:
             'о списке' и второе с его содержимым и клавиатуру для удаления позиций списка
         """
-        # options = await get_profiles_options_api(telegram_user_id)
-        # lang = options["telegram_language"]
-        lang = 'en'
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
 
         #  Отправка сообщения "Список {list_name}:" с выводом основной клавиатуры:
         del_cat_from = transl[lang]['categories']['delete']['del_cat_from']
@@ -142,19 +141,18 @@ class CategoriesDelete:
         response = await CategoriesAPI.delete_category_api(telegram_user_id, category_id)
         if response.status_code != 200:
             if response.json()['error'] == 'base_category':
-                cat = transl[lang]['categories']['vocabulary']['Category']
+                cat = transl[lang]['vocabulary']['category']
                 cat_name = response.json()['name']
                 is_base_cant_be_delete = transl[lang]['categories']['delete']['is_base_cant_be_delete']
                 message_text = f"{cat} *\"{cat_name}\"*\n {is_base_cant_be_delete}"
             elif response.json()['error'] == 'not_empty':
                 message_text = transl[lang]['categories']['delete']['can_delete_only_empty']
-                # message_text = 'You may delete only empty category.'
             else:
                 message_text = response.json()['error']
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, parse_mode='Markdown')
             await CategoriesDelete.categories_delete(telegram_user_id)
         else:
-            cat = transl[lang]['categories']['vocabulary']['Category']
+            cat = transl[lang]['vocabulary']['category']
             deleted = transl[lang]['categories']['delete']['deleted']
             message_text = f"{cat} {response.json()['name']} {deleted}"
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)

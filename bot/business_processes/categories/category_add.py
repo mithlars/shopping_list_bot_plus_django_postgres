@@ -64,27 +64,22 @@ class CategoryAddHandler:
     )
     async def add_new_category_handler(message: Message, state: FSMContext):
         telegram_user_id = message.chat.id
-        # options = await get_profiles_options_api(telegram_user_id)
-        # lang = options["telegram_language"]
-        lang = 'en'
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
         cancel = transl[lang]['buttons']['cancel']
-        # cancel = 'Cancel'
         cancel_button = emoji['add'] + emoji['categories'] + cancel
         kb = [[KeyboardButton(text=cancel_button)]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.set_state(StatesNewCategory.name)
         input_name = transl[lang]['categories']['add']['input_name']
-        # input_name = 'Add new category name'
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=input_name, reply_markup=stop_kb)
 
     @staticmethod
-    # @category_add_router.message(
-    #     lambda message: any(
-    #         f"{emoji['add']}{emoji['categories']}{transl[lang]['buttons']['cancel']}"
-    #         == message.text for lang in transl.keys()
-    #     )
-    # )  # TODO: Переделать: transl['en']
-    @category_add_router.message(F.text == f"{emoji['add']}{emoji['categories']}{transl['en']['buttons']['cancel']}")
+    @category_add_router.message(
+        lambda message:
+        any(message.text == f"{emoji['add']}{emoji['categories']}{transl[lang]['buttons']['cancel']}"
+            for lang in transl.keys())
+    )
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()
@@ -98,7 +93,7 @@ class CategoryAddHandler:
         # lang = options["telegram_language"]
         lang = 'en'
         cancel_button = emoji['add'] + emoji['categories'] + transl[lang]['buttons']['cancel']
-        no_descr_button = transl[lang]['buttons']['no_description']
+        no_descr_button = transl[lang]['buttons']['no_descr']
         kb = [[KeyboardButton(text=no_descr_button), KeyboardButton(text=cancel_button)]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.update_data(name=message.text, description="")
@@ -110,10 +105,9 @@ class CategoryAddHandler:
     @category_add_router.message(StatesNewCategory.description)
     async def add_description_for_new_category_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
-        # options = await get_profiles_options_api(telegram_user_id)
-        # lang = options["telegram_language"]
-        lang = 'en'
-        no_description = transl[lang]['buttons']['no_description']
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
+        no_description = transl[lang]['buttons']['no_descr']
         if message.text != no_description:
             await state.update_data(description=message.text)
         new_category_data = await state.get_data()
@@ -140,4 +134,3 @@ class CategoryAddHandler:
                                      parse_mode='Markdown')
         #  Чтение списка категорий:
         await UpdateCategoryStart.categories_read_for_update(telegram_user_id)
-        # await CategoriesRead.categories_read_and_menu(telegram_user_id)

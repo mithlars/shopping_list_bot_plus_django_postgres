@@ -80,17 +80,14 @@ class CategoriesSortStart:
     )
     async def categories_sort_handler(message: Message):
         telegram_user_id = message.from_user.id
-        # options = await get_profiles_options_api(telegram_user_id)
-        # lang = options['telegram_language']
-        lang = 'en'
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options['telegram_language']
         categories_text = transl[lang]['categories']['sort']['choose_move']
-        # categories_text = 'Select actions to modify categorization:'
         sort_keyboard = await CategoriesSortStart.categories_sort_api(telegram_user_id, lang)
         if sort_keyboard:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=categories_text, reply_markup=sort_keyboard)
         else:
             message_text = transl[lang]['categories']['sort']['not_enough']
-            # message_text = 'Too few categories to sort.'
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
             await UpdateCategoryStart.categories_read_for_update(telegram_user_id)
 
@@ -118,7 +115,6 @@ class CategoriesSortMove:
         response = await CategoriesSortMove.categories_sort_move_api(telegram_user_id, category_id, move)
         if response.status_code != 200:
             trouble_message = transl[lang]['errors']['smt_rong']
-            # trouble_message = "Something went wrong"
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=trouble_message)
             await UpdateCategoryStart.categories_read_for_update(telegram_user_id)
         else:

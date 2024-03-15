@@ -7,15 +7,17 @@ transl = {
                 },
                 'buttons': {
                     'cancel': 'Отмена',
-                    'no_description': 'Без описания'
+                    'no_chngs': "Без изменений",
+                    'no_descr': 'Без описания'
                 },
                 'errors': {
                     'smt_rong': "Что-то пошло не так"
                 },
+                'vocabulary': {
+                    'category': 'Категория',
+                    'ok': 'Хорошо'
+                },
                 'categories': {
-                    'vocabulary': {
-                        'Category': 'Категория'
-                    },
                     'add': {
                         'input_name': 'Введите имя новой категории',
                         'new': 'Новая категория',
@@ -32,6 +34,19 @@ transl = {
                     'sort': {
                         'choose_move': 'Выберите действия для изменения сортировки категорий:',
                         'not_enough': 'Категорий слишком мало для сортировки.'
+                    },
+                    'purify': {
+                        'which_cat_purify_1': 'Какую категорию из списка',
+                        'which_cat_purify_2': 'Вы хотите очистить?',
+                        'sure_delete_all_q': 'Вы уверены, что хотите удалить позиции категории?',
+                        'i_am_sure': 'Да, я хочу удалить позиции этой категории!',
+                        'no_i_chged_mind': 'Нет, я передумал удалять позиции категории!'
+                    },
+                    'update': {
+                        'choose_cat_for_update': 'Выберите категорию для редактирования:',
+                        'input_new_cat_name': 'Введите новое имя для категории',
+                        'input_new_cat_descr': 'Теперь введите новое описание',
+                        'your_chs_no_chngs': 'Вы решили оставить данные категории без изменений.'
                     }
                 },
                 'options': {
@@ -148,15 +163,17 @@ transl = {
                 },
                 'buttons': {
                     'cancel': 'Cancel',
-                    'no_description': 'Without description'
+                    'no_chngs': "Without changes",
+                    'no_descr': 'Without description'
                 },
                 'errors': {
                     'smt_rong': "Something went wrong"
                 },
+                'vocabulary': {
+                    'category': 'Category',
+                    'ok': 'OK'
+                },
                 'categories': {
-                    'vocabulary': {
-                        'Category': 'Category'
-                    },
                     'add': {
                         'input_name': 'Add new category name',
                         'new': 'New category',
@@ -173,6 +190,19 @@ transl = {
                     'sort': {
                         'choose_move': 'Select actions to modify categorization:',
                         'not_enough': 'Too few categories to sort.'
+                    },
+                    'purify': {
+                        'which_cat_purify_1': 'Which category from the',
+                        'which_cat_purify_2': 'list you want to purify?',
+                        'sure_delete_all_q': 'Are you sure you want to delete all the category positions?',
+                        'i_am_sure': 'Yes I wont to delete all the category positions!',
+                        'no_i_chged_mind': 'No I changed my mind!'
+                    },
+                    'update': {
+                        'choose_cat_for_update': 'Выберите категорию для редактирования:',
+                        'input_new_cat_name': 'Введите новое имя для категории',
+                        'input_new_cat_descr': 'Теперь введите новое описание',
+                        'your_chs_no_chngs': 'Вы решили оставить данные категории без изменений.'
                     }
                 },
                 'options': {
