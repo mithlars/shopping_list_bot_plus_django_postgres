@@ -292,7 +292,7 @@ class GroupDitailView(views.APIView):
             group_serializer = GroupsSerializer(group)
             return Response(group_serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(data={"error": "Можно удалить только пустую группу."},
+            return Response(data={"error": "group is not empty"},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
 
 

@@ -9,14 +9,16 @@ from bot.api.django_auth import django_auth, update_last_request_time
 from bot.constants import django_address
 from bot.create_bot import MyBot
 
-group_line_up_router = Router()
+from aiogram.utils.i18n import gettext as _
+
+group_lineup_router = Router()
 
 
 class GroupLineUpStart:
 
     @staticmethod
     async def groups_data_processing(list_of_groups: list) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = "Выберите группу для редактирования категорий:\n"
+        message_text = _("Choose group to edit categories lineup:\n")
         number = 1
         builder = InlineKeyboardBuilder()
         for group_dict in list_of_groups:
@@ -26,7 +28,8 @@ class GroupLineUpStart:
             else:
                 message_text += "\n"
 
-            builder.add(InlineKeyboardButton(text=f"{number}", callback_data=f"group_line_up {group_dict['id']}"))
+            builder.add(InlineKeyboardButton(text=f"{number}",
+                                             callback_data=f"group_lineup {group_dict['id']} {group_dict['name']}"))
             number += 1
         builder.adjust(6)
         keyboard = builder.as_markup(resize_keyboard=True)
@@ -34,7 +37,7 @@ class GroupLineUpStart:
 
     @staticmethod
     @update_last_request_time(django_auth)
-    async def groups_read_for_line_up_api(telegram_user_id: int) -> Tuple[str, InlineKeyboardMarkup]:
+    async def groups_read_for_lineup_api(telegram_user_id: int) -> Tuple[str, InlineKeyboardMarkup]:
         url = f"{django_address}/groups/"
         data = {"telegram_user_id": telegram_user_id}
         response = django_auth.session.get(url=url, data=data)
@@ -42,10 +45,10 @@ class GroupLineUpStart:
         return message_text, keyboard
 
     @staticmethod
-    @group_line_up_router.callback_query(lambda c: c.data and c.data == "group_line_up")
-    async def groups_read_for_line_up_handler(callback: CallbackQuery):
+    @group_lineup_router.callback_query(lambda c: c.data and c.data == "group_lineup")
+    async def groups_read_for_lineup_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
-        message_text, keyboard = await GroupLineUpStart.groups_read_for_line_up_api(telegram_user_id)
+        message_text, keyboard = await GroupLineUpStart.groups_read_for_lineup_api(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
 
@@ -99,15 +102,14 @@ class GroupLineUpCategories:
         return keyboard
 
     @staticmethod
-    @group_line_up_router.callback_query(lambda c: c.data and c.data.startswith("group_line_up "))
+    @group_lineup_router.callback_query(lambda c: c.data and c.data.startswith("group_lineup "))
     async def categories_read_for_group_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
-        group_id = callback.data.split(' ')[1]
+        group_id, group_name = callback.data.split(' ')[1:]
         groups_categories = await GroupLineUpCategories.get_groups_categories_list_api(telegram_user_id, group_id)
-        print(f"{groups_categories = }")
         keyboard = \
             await GroupLineUpCategories.categories_read_for_group_api(telegram_user_id, group_id, groups_categories)
-        message_text = "Выберите категории, которые будут отображаться в группе:"
+        message_text = _("Select the categories that will be displayed in the group") + f" \"{group_name}\":"
         await MyBot.bot.send_message(chat_id=telegram_user_id,
                                      text=message_text,
                                      reply_markup=keyboard)
@@ -130,7 +132,7 @@ class GroupLineUpCategory:
         return response
 
     @staticmethod
-    @group_line_up_router.callback_query(lambda c: c.data and c.data.startswith("category_add_to_group "))
+    @group_lineup_router.callback_query(lambda c: c.data and c.data.startswith("category_add_to_group "))
     async def category_in_to_group_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
         message_id = callback.message.message_id
@@ -145,5 +147,5 @@ class GroupLineUpCategory:
                                                       message_id=message_id,
                                                       reply_markup=keyboard)
         else:
-            message_text = "Что-то пошло не так..."
+            message_text = _("Somthing went rong")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)

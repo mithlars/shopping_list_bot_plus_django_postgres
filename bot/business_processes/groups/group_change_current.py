@@ -13,6 +13,8 @@ from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.translate import transl
 
+from aiogram.utils.i18n import gettext as _
+
 group_change_current_router = Router()
 
 
@@ -20,7 +22,7 @@ class GroupChangeCurrentStart:
 
     @staticmethod
     async def data_processing(list_of_groups: list, current_group_id: int) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = "Ваши группы:\n"
+        message_text = _("Your groups:\n")
         number = 1
         builder = InlineKeyboardBuilder()
         for group_dict in list_of_groups:
@@ -36,7 +38,7 @@ class GroupChangeCurrentStart:
             builder.add(InlineKeyboardButton(text=f"{number}",
                                              callback_data=f"choose_current_group {group_dict['id']}"))
             number += 1
-        builder.add(InlineKeyboardButton(text="Весь список", callback_data="choose_current_group "))
+        builder.add(InlineKeyboardButton(text=_("All list"), callback_data="choose_current_group "))
         builder.adjust(6)
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
@@ -61,7 +63,7 @@ class GroupChangeCurrentStart:
     @staticmethod
     async def change_current_group(telegram_user_id: int):
         list_name = await get_lists_detail_api(telegram_user_id)
-        list_message_name = f"Группы списка \n\"{list_name}\":"
+        list_message_name = _("Groups of \n\"{list_name}\" list:").format(list_name=list_name)  # Группы списка
         keyboard = await groups_menu_keyboard_builder(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=list_message_name, reply_markup=keyboard)
 
@@ -105,5 +107,5 @@ class GroupChangeCurrent:
         new_current_group_id = callback.data.split(" ")[1]
         response_status = await GroupChangeCurrent.change_current_api(telegram_user_id, new_current_group_id)
         if response_status != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text='Что-то пошло не так...')
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_('Somthing went rong'))
         await GroupChangeCurrentStart.change_current_group(telegram_user_id)

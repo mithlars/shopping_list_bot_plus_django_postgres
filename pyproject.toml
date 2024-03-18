@@ -11,6 +11,7 @@ aiogram = "^3.3.0"
 requests = "^2.31.0"
 djangorestframework = "^3.14.0"
 pillow = "^10.2.0"
+babel = "^2.14.0"
 
 
 [build-system]

@@ -14,6 +14,8 @@ from ...constants import django_address, buttons_styles
 from ...create_bot import MyBot
 from ...translate import transl
 
+from aiogram.utils.i18n import gettext as _
+
 
 class GroupDeleteDataProcessing:
 
@@ -43,7 +45,7 @@ class GroupDeleteDataProcessing:
             number += 1
         keyboard = builder.as_markup(resize_keyboard=True)
         if message_text == "":
-            message_text = "Список групп пока пуст."
+            message_text = _("List of groups is empty now.")
         return message_text, keyboard
 
 
@@ -92,8 +94,8 @@ class GroupDelete:
         list_name = await get_lists_detail_api(telegram_user_id)
         text_categories, delete_keyboard = await GroupsAPI.get_groups_for_current_list_api(telegram_user_id)
 
-        list_message_name = (f"""Удаление категорий списка *"{list_name}"*\n"""
-                             f"""(можно удалить только *пустые категории*):""")
+        list_message_name = _("Deleting group from the list *\"{list_name}\".*\n"
+                              "(you may delete only *empty groups*):").format(list_name=list_name)
         main_keyboard = await groups_menu_keyboard_builder(telegram_user_id)
         #  Отправка сообщения "Список {list_name}:" с выводом основной клавиатуры:
         await MyBot.bot.send_message(chat_id=telegram_user_id,
@@ -126,15 +128,15 @@ class GroupDelete:
         response = await GroupsAPI.delete_group_api(telegram_user_id, group_id)
 
         if response.status_code == 406:
-            message_text = response.json()['error']
+            message_text = _("you may delete only *empty group*")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, parse_mode='Markdown')
             await GroupDelete.group_delete(telegram_user_id)
         elif response.status_code != 200:
-            message_text = "Что-то пошло не так"
+            message_text = _("Somthing went rong")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, parse_mode='Markdown')
             await GroupDelete.group_delete(telegram_user_id)
         else:
-            message_text = f"Группа {response.json()['name']} удалена"
+            message_text = _("Group \"{group_name}\" is deleted.").format(group_name=response.json()['name'])
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
             await GroupChangeCurrentStart.change_current_group(telegram_user_id)
             # await GroupsRead.groups_read_and_main_menu(telegram_user_id)

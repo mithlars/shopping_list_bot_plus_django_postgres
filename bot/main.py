@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from aiogram.utils.i18n import I18n
+
 from bot.business_processes.categories.categories_sort import categories_sort_router
 from bot.business_processes.categories.category_add import category_add_router
 from bot.business_processes.categories.category_delete import categories_delete_router
@@ -9,7 +11,7 @@ from bot.business_processes.categories.category_update import category_update_ro
 from bot.business_processes.groups.group_add import group_add_router
 from bot.business_processes.groups.group_change_current import group_change_current_router
 from bot.business_processes.groups.group_delete import group_delete_router
-from bot.business_processes.groups.group_line_up import group_line_up_router
+from bot.business_processes.groups.group_line_up import group_lineup_router
 from bot.business_processes.groups.group_edit import group_edit_router
 from bot.business_processes.groups.group_update import group_update_router
 from bot.business_processes.lists.list_change_current import list_change_current_router
@@ -26,6 +28,7 @@ from bot.business_processes.purchases.purchase_delete import purchases_delete_ro
 from bot.business_processes.purchases.purchase_uncategorize_one import purchase_uncategorize_one_router
 from bot.business_processes.purchases.purchase_update import purchase_update_router
 from bot.business_processes.user.manage_friends import manage_friends_router
+from bot.middlewares import LanguageMiddleware
 from constants import admin_telegram_id, startup_admin_message
 from bot.api.django_auth import django_auth
 from create_bot import MyBot
@@ -53,6 +56,10 @@ async def main():
     # Register startup hook to initialize webhook
     MyBot.dp.startup.register(on_startup)
 
+    i18n = I18n(path="locales", default_locale="en", domain="messages")
+    my_i18n_middleware = LanguageMiddleware(i18n)
+    MyBot.dp.update.middleware.register(my_i18n_middleware)
+
     # Register routers:
     MyBot.dp.include_routers(
         start_router,
@@ -72,7 +79,7 @@ async def main():
         group_add_router,
         group_delete_router,
         group_edit_router,
-        group_line_up_router,
+        group_lineup_router,
         group_update_router,
 
         # categories_read_router,

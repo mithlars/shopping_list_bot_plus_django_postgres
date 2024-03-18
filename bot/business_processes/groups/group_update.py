@@ -14,6 +14,11 @@ from bot.business_processes.groups.group_change_current import GroupChangeCurren
 from bot.constants import django_address
 from bot.create_bot import MyBot
 
+from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
+
+from bot.emoji import emoji
+
 # from bot.business_processes.groups.utils.groups_menu_keyboard import GroupsRead
 
 group_update_router = Router()
@@ -23,7 +28,7 @@ class GroupUpdateStart:
 
     @staticmethod
     async def groups_data_processing(list_of_groups: list) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = "Выберите категорию для редактирования:\n"
+        message_text = _("Choose category to edit:\n")
         number = 1
         builder = InlineKeyboardBuilder()
         for group_dict in list_of_groups:
@@ -74,12 +79,15 @@ class GroupUpdateFMS:
         response = django_auth.session.get(url=url, data=data)
         return response.json()
 
-    kb = [[KeyboardButton(text="Без изменений"), KeyboardButton(text="✏️🗃️Отмена")]]
-    stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+
 
     @staticmethod
     @group_update_router.callback_query(lambda c: c.data and c.data.startswith('group_update'))
     async def choose_group_for_update_handler(callback: CallbackQuery, state: FSMContext):
+        kb = [[KeyboardButton(text=_("No changes")),
+               KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel"))]]
+        stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+
         telegram_user_id = callback.from_user.id
         await state.set_state(GroupUpdateState.name)
 
@@ -91,35 +99,35 @@ class GroupUpdateFMS:
                                 group_ald_name=group_ald_name,
                                 group_ald_description=group_ald_description)
         await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                     text='Введите новое имя для группы',
-                                     reply_markup=GroupUpdateFMS.stop_same_kb)
+                                     text=_('Input new group name'),
+                                     reply_markup=stop_same_kb)
 
         await MyBot.bot.send_message(chat_id=telegram_user_id,
                                      text=f"`{group_ald_name}`",
                                      parse_mode='MarkdownV2')
 
     @staticmethod
-    @group_update_router.message(F.text == '✏️🗃️Отмена')
+    @group_update_router.message(F.text.replace(f"{emoji['edit']}{emoji['categories']}", "") == __('Cancel'))
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()
         await GroupChangeCurrentStart.change_current_group(telegram_user_id)
-        # await GroupsRead.groups_read_and_main_menu(telegram_user_id)
 
     @staticmethod
     @group_update_router.message(GroupUpdateState.name)
     async def update_group_name_handler(message: Message, state: FSMContext):
-        if message.text == "Без изменений":
+        if message.text == _("No changes"):
             data = await state.get_data()
             await state.update_data(name=data["group_ald_name"])
         else:
             await state.update_data(name=message.text)
-        kb = copy.deepcopy(GroupUpdateFMS.kb)
-        kb[0].append(KeyboardButton(text="Без описания"))
+        kb = [[KeyboardButton(text=_("No changes")),
+               KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel")),
+               KeyboardButton(text=_("Without description"))]]
         stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.set_state(GroupUpdateState.description)
         await MyBot.bot.send_message(chat_id=message.chat.id,
-                                     text="Теперь введите новое описание",
+                                     text=_("Now input new description"),
                                      reply_markup=stop_same_kb)
 
     @staticmethod
@@ -135,9 +143,9 @@ class GroupUpdateFMS:
     async def update_group_description_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         group_data = await state.get_data()
-        if message.text == "Без изменений":
+        if message.text == _("No changes"):
             group_data["description"] = group_data["group_ald_description"]
-        elif message.text == "Без описания":
+        elif message.text == _("Without description"):
             group_data["description"] = ""
         else:
             group_data["description"] = message.text
@@ -146,13 +154,11 @@ class GroupUpdateFMS:
         if (group_data['name'] == group_data["group_ald_name"]
                 and group_data["description"] == group_data["group_ald_description"]):
             await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                         text="Вы решили оставить данные категории без изменений.",
+                                         text=_("Your chose is leave group without changes"),
                                          reply_markup=ReplyKeyboardRemove())
             await GroupChangeCurrentStart.change_current_group(telegram_user_id)
-            # await GroupsRead.groups_read_and_main_menu(telegram_user_id)
         else:
             response = await GroupUpdateFMS.group_update_api(telegram_user_id, group_data)
             if response.status_code != 200:
-                await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так")
+                await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
             await GroupChangeCurrentStart.change_current_group(telegram_user_id)
-            # await GroupsRead.groups_read_and_main_menu(telegram_user_id)

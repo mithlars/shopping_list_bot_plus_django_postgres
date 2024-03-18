@@ -1,0 +1,135 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-03-18 23:43+0400\n"
+"PO-Revision-Date: 2024-03-17 21:04+0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: bot/business_processes/groups/group_add.py:69
+#: bot/business_processes/groups/group_add.py:76
+#: bot/business_processes/groups/group_add.py:87
+#: bot/business_processes/groups/group_update.py:82
+#: bot/business_processes/groups/group_update.py:107
+msgid "Cancel"
+msgstr "Отмена"
+
+#: bot/business_processes/groups/group_add.py:72
+#: bot/business_processes/groups/group_update.py:99
+msgid "Input new group name"
+msgstr "Введите новое имя группы"
+
+#: bot/business_processes/groups/group_add.py:86
+#: bot/business_processes/groups/group_add.py:97
+#: bot/business_processes/groups/group_update.py:122
+#: bot/business_processes/groups/group_update.py:144
+msgid "Without description"
+msgstr "Без описания"
+
+#: bot/business_processes/groups/group_add.py:91
+msgid "Now input description"
+msgstr "Теперь введите описание"
+
+#: bot/business_processes/groups/group_add.py:109
+msgid ""
+"New group *\"{new_group_name}\"* created.\n"
+"Description: *\"{new_group_description}\"*\n"
+msgstr ""
+"Новая группра *\"{new_group_name}\"* создана.\n"
+"Описание: *\"{new_group_description}\"*\n"
+
+#: bot/business_processes/groups/group_add.py:113
+#: bot/business_processes/groups/group_change_current.py:110
+#: bot/business_processes/groups/group_delete.py:135
+#: bot/business_processes/groups/group_line_up.py:150
+#: bot/business_processes/groups/group_update.py:159
+msgid "Somthing went rong"
+msgstr "Что-то пошло не так"
+
+#: bot/business_processes/groups/group_change_current.py:25
+msgid "Your groups:\n"
+msgstr "Ваши группы\n"
+
+#: bot/business_processes/groups/group_change_current.py:41
+msgid "All list"
+msgstr "Весь список"
+
+#: bot/business_processes/groups/group_change_current.py:66
+msgid ""
+"Groups of \n"
+"\"{list_name}\" list:"
+msgstr ""
+"Группы списка \n"
+"\"{list_name}\":"
+
+#: bot/business_processes/groups/group_delete.py:48
+msgid "List of groups is empty now."
+msgstr "Список групп пока пуст."
+
+#: bot/business_processes/groups/group_delete.py:97
+msgid ""
+"Deleting group from the list *\"{list_name}\".*\n"
+"(you may delete only *empty groups*):"
+msgstr ""
+"Удаление группы списка *\"{list_name}\"*\n"
+"(можно удалить только *пустые группы*):"
+
+#: bot/business_processes/groups/group_delete.py:131
+msgid "you may delete only *empty group*"
+msgstr "можно удалить только *пустую группу*"
+
+#: bot/business_processes/groups/group_delete.py:139
+msgid "Group \"{group_name}\" is deleted."
+msgstr "Группа \"{group_name}\" удалена."
+
+#: bot/business_processes/groups/group_edit.py:20
+msgid "Lineup"
+msgstr "Состав"
+
+#: bot/business_processes/groups/group_edit.py:21
+msgid "Rename"
+msgstr "Переименовать"
+
+#: bot/business_processes/groups/group_edit.py:33
+msgid "What do you want to do?"
+msgstr "Что Вы хотите сделать?"
+
+#: bot/business_processes/groups/group_line_up.py:21
+msgid "Choose group to edit categories lineup:\n"
+msgstr "Выберите группу для редактирования состава категорий:\n"
+
+#: bot/business_processes/groups/group_line_up.py:112
+msgid "Select the categories that will be displayed in the group"
+msgstr "Выберите категории, которые будут отображаться в группе"
+
+#: bot/business_processes/groups/group_update.py:31
+msgid "Choose category to edit:\n"
+msgstr "Выберите категорию для редактирования:\n"
+
+#: bot/business_processes/groups/group_update.py:82
+#: bot/business_processes/groups/group_update.py:116
+#: bot/business_processes/groups/group_update.py:142
+msgid "No changes"
+msgstr "Без изменений"
+
+#: bot/business_processes/groups/group_update.py:126
+msgid "Now input new description"
+msgstr "Теперь введите новое описание"
+
+#: bot/business_processes/groups/group_update.py:153
+msgid "Your chose is leave group without changes"
+msgstr "Вы решили оставить данные группы без изменений."
+
