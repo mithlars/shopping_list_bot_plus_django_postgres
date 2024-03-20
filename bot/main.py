@@ -18,13 +18,11 @@ from bot.business_processes.lists.list_change_current import list_change_current
 from bot.business_processes.lists.list_create import list_create_router
 from bot.business_processes.lists.list_delete import list_delete_router
 from bot.business_processes.lists.list_update import list_update_router
-from bot.business_processes.lists.lists_read_and_menu import lists_menu_router
 from bot.business_processes.lists.lists_share_and_menu import lists_share_router
 from bot.archive.main_menu import main_menu_router
 from bot.business_processes.options.options_read_and_menu import options_router
 from bot.business_processes.purchases.purchase_add import purchases_add_router
 from bot.business_processes.purchases.purchase_categorize_one import purchase_categorize_one_router
-from bot.business_processes.purchases.purchase_delete import purchases_delete_router
 from bot.business_processes.purchases.purchase_uncategorize_one import purchase_uncategorize_one_router
 from bot.business_processes.purchases.purchase_update import purchase_update_router
 from bot.business_processes.user.manage_friends import manage_friends_router
@@ -33,7 +31,7 @@ from constants import admin_telegram_id, startup_admin_message
 from bot.api.django_auth import django_auth
 from create_bot import MyBot
 from aiogram import Bot
-from bot.business_processes.purchases.list_read_and_menu import list_read_router
+from bot.business_processes.purchases.purchases_delete_and_list_menu import purchases_delete_and_list_menu
 from bot.business_processes.user.user_create_start import start_router
 
 
@@ -68,8 +66,7 @@ async def main():
         options_router,
 
         list_change_current_router,
-        lists_menu_router,
-        list_read_router,
+        purchases_delete_and_list_menu,
         list_create_router,
         list_update_router,
         list_delete_router,
@@ -82,14 +79,12 @@ async def main():
         group_lineup_router,
         group_update_router,
 
-        # categories_read_router,
         category_add_router,
         category_update_router,
         categories_sort_router,
         categories_delete_router,
         category_purify_router,
 
-        purchases_delete_router,
         purchase_update_router,
         purchase_categorize_one_router,
         purchase_uncategorize_one_router,

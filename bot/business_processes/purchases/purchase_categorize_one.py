@@ -6,12 +6,13 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.purchases.list_read_and_menu import ListRead
+from bot.business_processes.purchases.purchases_delete_and_list_menu import ListRead
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
-from bot.emoji import emoji
 from bot.translate import transl
+
+from aiogram.utils.i18n import gettext as _
 
 purchase_categorize_one_router = Router()
 
@@ -39,8 +40,8 @@ class PurchaseCategorizeOneStart:
                     builder.add(InlineKeyboardButton(text=f"{number_count}", callback_data=callback_data))
                     number_count += 1
         if message_text == "":
-            message_text = "Список (категории группы) пока пуст(ы)."
-        builder.add(InlineKeyboardButton(text="Отмена",
+            message_text = _("List (group) is steel empty")
+        builder.add(InlineKeyboardButton(text=_("Cancel"),
                                          callback_data=f"categorize_purchase stop stop"))
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
@@ -119,7 +120,7 @@ class PurchaseCategorizeChooseCategory:
                 builder.add(InlineKeyboardButton(text=f"{number_count}", callback_data=callback_data))
                 number_count += 1
         # Adding cancel button to keyboard:
-        builder.add(InlineKeyboardButton(text="Отмена", callback_data=f"categorize_with_1 stop s s s"))
+        builder.add(InlineKeyboardButton(text=_("Cancel"), callback_data=f"categorize_with_1 stop s s s"))
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
 
@@ -140,7 +141,7 @@ class PurchaseCategorizeChooseCategory:
         telegram_user_id = callback.from_user.id
         purchase_id, category_from_id = callback.data.split(" ")[1:]
         if purchase_id == "stop":
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="OK")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("OK"))
             await ListRead.get_current_lists_purchases_list(telegram_user_id)
         else:
             message_text, keyboard = await PurchaseCategorizeChooseCategory.categories_list_api(
@@ -154,9 +155,9 @@ class PurchaseCategorize:
     async def del_or_keep_keyboard(category_id: str, purchase_id: str, category_from_id: str) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
         data = f"{category_id} {purchase_id} {category_from_id}"
-        builder.add(InlineKeyboardButton(text="Удалить", callback_data=f"categorize_with_2 del {data}"))
-        builder.add(InlineKeyboardButton(text="Оставить", callback_data=f"categorize_with_2 keep {data}"))
-        builder.add(InlineKeyboardButton(text="Отмена", callback_data=f"categorize_with_1 stop 0 0 0"))
+        builder.add(InlineKeyboardButton(text=_("Delete"), callback_data=f"categorize_with_2 del {data}"))
+        builder.add(InlineKeyboardButton(text=_("Keep"), callback_data=f"categorize_with_2 keep {data}"))
+        builder.add(InlineKeyboardButton(text=_("Cancel"), callback_data=f"categorize_with_1 stop 0 0 0"))
         keyboard = builder.as_markup(resize_keyboard=True)
         return keyboard
 
@@ -195,7 +196,7 @@ class PurchaseCategorize:
         command, category_id, purchase_id, category_from_id = callback.data.split(" ")[1:]
 
         if command == "stop":
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="OK")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("OK"))
             await ListRead.get_current_lists_purchases_list(telegram_user_id)
 
         elif command == 'start':
@@ -205,11 +206,11 @@ class PurchaseCategorize:
                 response = await PurchaseCategorize.categorizing_api(telegram_user_id, category_id,
                                                                      purchase_id, category_from_id)
                 if response.status_code != 200:
-                    await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+                    await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
                 await ListRead.get_current_lists_purchases_list(telegram_user_id)
             else:
                 keyboard = await PurchaseCategorize.del_or_keep_keyboard(category_id, purchase_id, category_from_id)
-                message_text = f"Удалить позицию из предыдущей категории?"
+                message_text = _("Remove this item from the previous category?")
                 await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=keyboard)
 
     @staticmethod
@@ -227,11 +228,11 @@ class PurchaseCategorize:
             response = await PurchaseCategorize.categorizing_api(telegram_user_id, category_id,
                                                                  purchase_id, category_from_id)
             if response.status_code != 200:
-                await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+                await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
             await ListRead.get_current_lists_purchases_list(telegram_user_id)
 
         else:
             response = await PurchaseCategorize.categorizing_api(telegram_user_id, category_id, purchase_id)
             if response.status_code != 200:
-                await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+                await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
             await ListRead.get_current_lists_purchases_list(telegram_user_id)

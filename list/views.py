@@ -160,7 +160,7 @@ class ListDitailView(views.APIView):
             list_obj.delete()
             return Response({"message": "OK"}, status=status.HTTP_200_OK)
         else:
-            return Response({"error": "Нельзя удалить единственный список"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class GroupsView(generics.ListAPIView):

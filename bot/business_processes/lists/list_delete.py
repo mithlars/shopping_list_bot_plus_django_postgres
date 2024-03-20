@@ -1,17 +1,20 @@
 from typing import Tuple
 
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, ReplyKeyboardRemove
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.lists.lists_read_and_menu import ListsReadAndMenu
+from bot.business_processes.lists.list_change_current import ListChangeCurrent
 from bot.business_processes.lists.utils.lists_menu_keyboard import lists_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
+from bot.emoji import emoji
 from bot.translate import transl
+
+from aiogram.utils.i18n import gettext as _
 
 list_delete_router = Router()
 
@@ -27,10 +30,10 @@ class ListDeleteStart:
                         ) -> Tuple[str, InlineKeyboardMarkup]:
         builder = InlineKeyboardBuilder()
         count_own, count_shared = 0, 0
-        if text_own != "_____Собственные списки:\n":  # If there is own lists
+        if text_own != _("_____Your own lists:\n"):  # If there is own lists
             message_text += text_own  # add own lists text part to final message text
             count_own = len(text_own.splitlines()) - 2  # count buttons for own lists
-        if text_shared != "_____Списки других пользователей:\n":
+        if text_shared != _("_____Other user lists:\n"):
             message_text += text_shared  # add shared lists text part to final message text
             count_shared = len(text_shared.splitlines()) - 2  # count buttons for shared lists
         adjust = []
@@ -59,14 +62,13 @@ class ListDeleteStart:
         """
             Function returns message text with list of lists and keyboard for choice list to delete
         """
-        message_text = "Выберите список для удаления:\n"
-        text_own = "\n\_\_\_\_\_Собственные списки:\n"
+        message_text = _("Choose list to delete:\n")
+        text_own = _("\n\_\_\_\_\_Your own lists:\n")
         number_own = 1
         buttons_own = []
         number_shared = 1
         buttons_shared = []
-        text_shared = "\n\_\_\_\_\_Списки других пользователей:\n"
-        # builder = InlineKeyboardBuilder()
+        text_shared = _("\n\_\_\_\_\_Other user lists:\n")
         current_list_data = list_of_lists.pop()  # To highlight current list in bold
         for list_dict in list_of_lists:
             list_dict_fields = list_dict['fields']
@@ -88,7 +90,7 @@ class ListDeleteStart:
             # Making inline-buttons and assembly message text parts for own and shared lists:
             if list_dict_fields['owner'] == profile_id:
                 number_own += 1
-                button_text = f"❌️{number}"
+                button_text = f"{emoji['delete']}{number}"
                 buttons_own.append(
                     InlineKeyboardButton(text=button_text, callback_data=f"delete_list, {list_dict['pk']}"))
                 text_own += text
@@ -101,8 +103,9 @@ class ListDeleteStart:
         # Assembling keyboard and final message text:
         message_text, keyboard = \
             await ListDeleteStart.join_data(message_text, text_own, text_shared, buttons_own, buttons_shared)
-        message_text += ("\n Свои списки можно удалить полностью (❌️), "
-                         "а к спискам других пользователей можно только удалить доступ (🙈)")
+        message_text += _("\nYou can fully delete only your own lists ({delete}), "
+                          "and delete access for lists of other users ({blind})"
+                          ).format(delete=emoji['delete'], blind=emoji['blind'])
         return message_text, keyboard
 
     @staticmethod
@@ -161,7 +164,7 @@ class ListDeleteDecision:
         for category in list_data:
             text += f"_____{category['name']}\n"
             if len(category['purchases']) == 0:
-                text += f"    ..............\n"
+                text += _("    empty\n")
             else:
                 for purchase in category['purchases']:
                     text += f"{number}. {purchase['name']}"
@@ -173,9 +176,9 @@ class ListDeleteDecision:
                         text += '\n'
 
         builder = InlineKeyboardBuilder()
-        builder.add(InlineKeyboardButton(text="Да, я хочу удалить список!",
+        builder.add(InlineKeyboardButton(text=_("Yes! I wont to delete the list!"),
                                          callback_data=f"list_delete_decision OK {list_id}"))
-        builder.add(InlineKeyboardButton(text="Нет, я передумал удалять список!",
+        builder.add(InlineKeyboardButton(text=_("No! I've changed my mind!"),
                                          callback_data=f"list_delete_decision Cancel {list_id}"))
         builder.adjust(1)
         keyboard = builder.as_markup(resize_keyboard=True)
@@ -201,7 +204,8 @@ class ListDeleteDecision:
         data = callback.data.split(" ")
         list_id = data[1]
         list_name, text_list, keyboard = await ListDeleteDecision.get_hale_list_api(telegram_user_id, list_id)
-        list_message_name = f"Вы уверены, что хотите удалить список \n\"{list_name}\":\nВот его содержимое:"
+        list_message_name = _("Are you sure you want to delete the list \n\"{list_name}\":\nHere’s its contents:"
+                              ).format(list_name=list_name)
         # Сообщение с именем списка, удаляет reply-клавиатуру:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=list_message_name, reply_markup=ReplyKeyboardRemove())
         # Сообщение со списком категорий и их позициями, с inline-клавиатурой подтверждения:
@@ -229,23 +233,21 @@ class ListDelete:
     @list_delete_router.callback_query(lambda c: c.data and c.data.startswith('list_delete_decision'))
     async def list_delete_or_not_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
-        data = callback.data.split(' ')[1:]
-        decision = data[0]
-        list_id = int(data[1])
+        decision, list_id = callback.data.split(' ')[1:]
 
         if decision == "Cancel":
-            text = "OK"
+            text = _("OK")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
         else:
             response = await ListDelete.list_delete_api(telegram_user_id, list_id)
 
             if response.status_code == 406:
-                text = response.json()['error']
+                text = _("You cannot delete a list if it is single")
                 await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
             elif response.status_code != 200:
-                text = "Что-то пошло не так..."
+                text = _("Somthing went rong")
                 await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
 
-        await ListsReadAndMenu.lists_read_and_menu(telegram_user_id)
+        await ListChangeCurrent.change_current_list(telegram_user_id)

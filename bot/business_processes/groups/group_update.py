@@ -154,7 +154,7 @@ class GroupUpdateFMS:
         if (group_data['name'] == group_data["group_ald_name"]
                 and group_data["description"] == group_data["group_ald_description"]):
             await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                         text=_("Your chose is leave group without changes"),
+                                         text=_("Your chose is leave the group without changes"),
                                          reply_markup=ReplyKeyboardRemove())
             await GroupChangeCurrentStart.change_current_group(telegram_user_id)
         else:

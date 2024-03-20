@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-18 23:43+0400\n"
+"POT-Creation-Date: 2024-03-20 18:34+0400\n"
 "PO-Revision-Date: 2024-03-17 21:04+0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -22,24 +22,50 @@ msgstr ""
 #: bot/business_processes/groups/group_add.py:69
 #: bot/business_processes/groups/group_add.py:76
 #: bot/business_processes/groups/group_add.py:87
-#: bot/business_processes/groups/group_update.py:82
-#: bot/business_processes/groups/group_update.py:107
+#: bot/business_processes/groups/group_update.py:88
+#: bot/business_processes/groups/group_update.py:110
+#: bot/business_processes/groups/group_update.py:125
+#: bot/business_processes/lists/list_create.py:58
+#: bot/business_processes/lists/list_update.py:95
+#: bot/business_processes/lists/list_update.py:112
+#: bot/business_processes/lists/list_update.py:124
+#: bot/business_processes/purchases/purchase_add.py:69
+#: bot/business_processes/purchases/purchase_add.py:70
+#: bot/business_processes/purchases/purchase_add.py:103
+#: bot/business_processes/purchases/purchase_categorize_one.py:44
+#: bot/business_processes/purchases/purchase_categorize_one.py:123
+#: bot/business_processes/purchases/purchase_categorize_one.py:160
+#: bot/business_processes/purchases/purchase_uncategorize_one.py:45
+#: bot/business_processes/purchases/purchase_update.py:55
+#: bot/business_processes/purchases/purchase_update.py:104
+#: bot/business_processes/purchases/purchase_update.py:131
+#: bot/business_processes/purchases/purchase_update.py:142
+#: bot/business_processes/user/manage_friends.py:148
+#: bot/business_processes/user/manage_friends.py:161
+#: bot/business_processes/user/manage_friends.py:191
 msgid "Cancel"
 msgstr "Отмена"
 
 #: bot/business_processes/groups/group_add.py:72
-#: bot/business_processes/groups/group_update.py:99
+#: bot/business_processes/groups/group_update.py:102
 msgid "Input new group name"
 msgstr "Введите новое имя группы"
 
 #: bot/business_processes/groups/group_add.py:86
 #: bot/business_processes/groups/group_add.py:97
-#: bot/business_processes/groups/group_update.py:122
-#: bot/business_processes/groups/group_update.py:144
+#: bot/business_processes/groups/group_update.py:126
+#: bot/business_processes/groups/group_update.py:148
+#: bot/business_processes/lists/list_create.py:67
+#: bot/business_processes/lists/list_create.py:78
+#: bot/business_processes/lists/list_update.py:123
+#: bot/business_processes/lists/list_update.py:151
+#: bot/business_processes/purchases/purchase_update.py:141
+#: bot/business_processes/purchases/purchase_update.py:176
 msgid "Without description"
 msgstr "Без описания"
 
 #: bot/business_processes/groups/group_add.py:91
+#: bot/business_processes/lists/list_create.py:72
 msgid "Now input description"
 msgstr "Теперь введите описание"
 
@@ -55,7 +81,20 @@ msgstr ""
 #: bot/business_processes/groups/group_change_current.py:110
 #: bot/business_processes/groups/group_delete.py:135
 #: bot/business_processes/groups/group_line_up.py:150
-#: bot/business_processes/groups/group_update.py:159
+#: bot/business_processes/groups/group_update.py:163
+#: bot/business_processes/lists/list_change_current.py:105
+#: bot/business_processes/lists/list_create.py:86
+#: bot/business_processes/lists/list_delete.py:250
+#: bot/business_processes/lists/lists_share_and_menu.py:153
+#: bot/business_processes/purchases/purchase_categorize_one.py:209
+#: bot/business_processes/purchases/purchase_categorize_one.py:231
+#: bot/business_processes/purchases/purchase_categorize_one.py:237
+#: bot/business_processes/purchases/purchase_uncategorize_one.py:139
+#: bot/business_processes/purchases/purchase_update.py:191
+#: bot/business_processes/user/manage_friends.py:96
+#: bot/business_processes/user/manage_friends.py:126
+#: bot/business_processes/user/manage_friends.py:181
+#: bot/business_processes/user/manage_friends.py:210
 msgid "Somthing went rong"
 msgstr "Что-то пошло не так"
 
@@ -119,17 +158,292 @@ msgstr "Выберите категории, которые будут отоб�
 msgid "Choose category to edit:\n"
 msgstr "Выберите категорию для редактирования:\n"
 
-#: bot/business_processes/groups/group_update.py:82
-#: bot/business_processes/groups/group_update.py:116
-#: bot/business_processes/groups/group_update.py:142
+#: bot/business_processes/groups/group_update.py:87
+#: bot/business_processes/groups/group_update.py:119
+#: bot/business_processes/groups/group_update.py:124
+#: bot/business_processes/groups/group_update.py:146
+#: bot/business_processes/lists/list_update.py:94
+#: bot/business_processes/lists/list_update.py:122
+#: bot/business_processes/lists/list_update.py:127
+#: bot/business_processes/lists/list_update.py:149
+#: bot/business_processes/purchases/purchase_update.py:104
+#: bot/business_processes/purchases/purchase_update.py:140
+#: bot/business_processes/purchases/purchase_update.py:148
+#: bot/business_processes/purchases/purchase_update.py:174
 msgid "No changes"
 msgstr "Без изменений"
 
-#: bot/business_processes/groups/group_update.py:126
+#: bot/business_processes/groups/group_update.py:130
+#: bot/business_processes/lists/list_update.py:134
+#: bot/business_processes/purchases/purchase_update.py:154
 msgid "Now input new description"
 msgstr "Теперь введите новое описание"
 
-#: bot/business_processes/groups/group_update.py:153
-msgid "Your chose is leave group without changes"
+#: bot/business_processes/groups/group_update.py:157
+msgid "Your chose is leave the group without changes"
 msgstr "Вы решили оставить данные группы без изменений."
+
+#: bot/business_processes/lists/list_change_current.py:41
+msgid ""
+"\n"
+"Hint:\n"
+"To switch to the list -- press button with it's number:"
+msgstr ""
+"\n"
+"Подсказка:\n"
+"Для переключения на список -- нажмите кнопку с его номером:"
+
+#: bot/business_processes/lists/list_change_current.py:76
+msgid "Your lists:\n"
+msgstr "Ваши списки:\n"
+
+#: bot/business_processes/lists/list_create.py:52
+#: bot/business_processes/lists/list_create.py:68
+msgid "{add}{lists}Cansel"
+msgstr "{add}{lists}Отмена"
+
+#: bot/business_processes/lists/list_create.py:55
+msgid "Input new list name"
+msgstr "Введите имя нового списка"
+
+#: bot/business_processes/lists/list_create.py:88
+msgid ""
+"New list *\"{new_list_name}\"* is created.\n"
+"Description: *\"{new_list_description}\"*\n"
+msgstr ""
+"Новый список *\"{new_list_name}\"* создан.\n"
+"Описание: *\"{new_list_description}\"*\n"
+
+#: bot/business_processes/lists/list_delete.py:33
+msgid "_____Your own lists:\n"
+msgstr "_____Собственные списки:\n"
+
+#: bot/business_processes/lists/list_delete.py:36
+msgid "_____Other user lists:\n"
+msgstr "_____Списки других пользователей:\n"
+
+#: bot/business_processes/lists/list_delete.py:65
+msgid "Choose list to delete:\n"
+msgstr "Выберите список для удаления:\n"
+
+#: bot/business_processes/lists/list_delete.py:66
+msgid ""
+"\n"
+"\\_\\_\\_\\_\\_Your own lists:\n"
+msgstr ""
+"\n"
+"\\_\\_\\_\\_\\_Собственные списки:\n"
+
+#: bot/business_processes/lists/list_delete.py:71
+msgid ""
+"\n"
+"\\_\\_\\_\\_\\_Other user lists:\n"
+msgstr ""
+"\n"
+"\\_\\_\\_\\_\\_Списки других пользователей:\n"
+
+#: bot/business_processes/lists/list_delete.py:106
+msgid ""
+"\n"
+"You can fully delete only your own lists ({delete}), and delete access "
+"for lists of other users ({blind})"
+msgstr ""
+"\n"
+"Свои списки можно удалить полностью ({delete}), а к спискам других "
+"пользователей можно только удалить доступ ({blind})"
+
+#: bot/business_processes/lists/list_delete.py:167
+msgid "    empty\n"
+msgstr "    пусто\n"
+
+#: bot/business_processes/lists/list_delete.py:179
+msgid "Yes! I wont to delete the list!"
+msgstr "Да, я хочу удалить список!"
+
+#: bot/business_processes/lists/list_delete.py:181
+msgid "No! I've changed my mind!"
+msgstr "Нет, я передумал удалять список!"
+
+#: bot/business_processes/lists/list_delete.py:207
+msgid ""
+"Are you sure you want to delete the list \n"
+"\"{list_name}\":\n"
+"Here’s its contents:"
+msgstr ""
+"Вы уверены, что хотите удалить список \n"
+"\"{list_name}\":\n"
+"Вот его содержимое:"
+
+#: bot/business_processes/lists/list_delete.py:239
+#: bot/business_processes/purchases/purchase_categorize_one.py:144
+#: bot/business_processes/purchases/purchase_categorize_one.py:199
+#: bot/business_processes/purchases/purchase_uncategorize_one.py:134
+#: bot/business_processes/purchases/purchase_update.py:109
+msgid "OK"
+msgstr "Хорошо"
+
+#: bot/business_processes/lists/list_delete.py:246
+msgid "You cannot delete a list if it is single"
+msgstr "Нельзя удалить единственный список"
+
+#: bot/business_processes/lists/list_update.py:29
+msgid "Choose list for edit\n"
+msgstr "Выберите список для редактирования:\n"
+
+#: bot/business_processes/lists/list_update.py:104
+msgid "Input new name for the list"
+msgstr "Введите новое имя списка"
+
+#: bot/business_processes/lists/list_update.py:160
+msgid "Your chose is leave the list without changes"
+msgstr "Вы решили оставить данные списка без изменений."
+
+#: bot/business_processes/lists/lists_share_and_menu.py:50
+msgid ""
+"You don't have lists yet.\n"
+"Pleas go back to the lists menu and create new list"
+msgstr ""
+"У Вас пока нет списков.\n"
+"Вернитесь в меню списков и создайте новый список."
+
+#: bot/business_processes/lists/lists_share_and_menu.py:64
+msgid "Which list you want to share?:"
+msgstr "К какому списку Вы хотите дать доступ?:"
+
+#: bot/business_processes/lists/lists_share_and_menu.py:123
+msgid "There's no one in your surroundings"
+msgstr "В Вашем окружении никого нет."
+
+#: bot/business_processes/lists/lists_share_and_menu.py:126
+msgid "Choose who of your surroundings can work with the list"
+msgstr ""
+"Выберите кто из Вашего окружения может работать со списком "
+"\"{list_name}\":"
+
+#: bot/business_processes/options/options_read_and_menu.py:33
+msgid "Choose language"
+msgstr "Выберите язык:"
+
+#: bot/business_processes/purchases/purchase_add.py:107
+msgid "OK, inputted data is deleted"
+msgstr "Хорошо, введенные данные удалены."
+
+#: bot/business_processes/purchases/purchase_add.py:190
+msgid ""
+"Choose category for new list position\n"
+"{purchase_name}:"
+msgstr ""
+"Выберите категорию для новой позиции списка\n"
+"{purchase_name}:"
+
+#: bot/business_processes/purchases/purchase_add.py:214
+msgid "Choose category for other new list positions "
+msgstr "Выберите категорию для остальных новых позиций списка:\n"
+
+#: bot/business_processes/purchases/purchase_add.py:289
+msgid "All of this positions are already in the list\n"
+msgstr "Все эти позиции уже есть в списке:\n"
+
+#: bot/business_processes/purchases/purchase_add.py:291
+msgid "Positions which added to the list:\n"
+msgstr "Позиции добавленные в список:\n"
+
+#: bot/business_processes/purchases/purchase_add.py:306
+msgid ""
+"\n"
+"The following positions are already in the list\n"
+msgstr ""
+"\n"
+"Следующие позиции уже есть в списке\n"
+
+#: bot/business_processes/purchases/purchase_categorize_one.py:43
+#: bot/business_processes/purchases/purchase_uncategorize_one.py:44
+#: bot/business_processes/purchases/purchase_update.py:54
+#: bot/business_processes/purchases/purchases_delete_and_list_menu.py:45
+msgid "List (group) is steel empty"
+msgstr "Список (группа) пока пуст(ая)."
+
+#: bot/business_processes/purchases/purchase_categorize_one.py:158
+msgid "Delete"
+msgstr "Удалить"
+
+#: bot/business_processes/purchases/purchase_categorize_one.py:159
+msgid "Keep"
+msgstr "Оставить"
+
+#: bot/business_processes/purchases/purchase_categorize_one.py:213
+msgid "Remove this item from the previous category?"
+msgstr "Удалить позицию из предыдущей категории?"
+
+#: bot/business_processes/purchases/purchase_update.py:123
+msgid "Input new name for new list position"
+msgstr "Введите новое имя для позиции списка"
+
+#: bot/business_processes/purchases/purchase_update.py:185
+msgid "Your chose is leave the list position without changes"
+msgstr "Вы решили оставить данные позиции списка без изменений."
+
+#: bot/business_processes/purchases/purchases_delete_and_list_menu.py:67
+msgid "List \"{list_name}\""
+msgstr "Список \"{list_name}\":"
+
+#: bot/business_processes/user/manage_friends.py:32
+#: bot/business_processes/user/manage_friends.py:46
+msgid "Your surrounding:\n"
+msgstr "Ваше окружение:\n"
+
+#: bot/business_processes/user/manage_friends.py:47
+msgid "Your surrounding is empty."
+msgstr "В вашем окружении никого нет."
+
+#: bot/business_processes/user/manage_friends.py:49
+msgid ""
+"\n"
+"(press user's number to delete him/her from your surrounding)"
+msgstr ""
+"\n"
+"(нажмите номер пользователя для удаления его из окружения)"
+
+#: bot/business_processes/user/manage_friends.py:120
+msgid "Add user to my surrounding"
+msgstr "Добавить пользователя в мое окружение"
+
+#: bot/business_processes/user/manage_friends.py:141
+msgid "username"
+msgstr "username"
+
+#: bot/business_processes/user/manage_friends.py:142
+msgid "telegram_id"
+msgstr "telegram_id"
+
+#: bot/business_processes/user/manage_friends.py:144
+msgid "What user data do you have?"
+msgstr "Какие данные о пользователе у Вас есть?"
+
+#: bot/business_processes/user/manage_friends.py:166
+msgid "Send user username:"
+msgstr "Пришлите username пользователя:"
+
+#: bot/business_processes/user/manage_friends.py:196
+msgid "Send user telegram_id:"
+msgstr "Пришлите идентификатор (id) пользователя telegram:"
+
+#: bot/business_processes/user/manage_friends.py:227
+msgid ""
+"Send the message-command below to another user and ask him/her to send it"
+" to the chat with the bot so that the user can give you access to his/her"
+" lists:"
+msgstr ""
+"Перешлите сообщение-команду ниже другому пользователю и попросите его "
+"переслать его в чат с ботом, чтобы пользователь мог дать Вам доступ к "
+"своим спискам:"
+
+#: bot/business_processes/user/manage_friends.py:232
+msgid ""
+"Add user to my surrounding {telegram_user_firstname} "
+"{telegram_user_lastname} with id:{telegram_user_id}"
+msgstr ""
+"\n"
+"Добавить в друзья пользователя {telegram_user_firstname} "
+"{telegram_user_lastname} с id:{telegram_user_id}"
 

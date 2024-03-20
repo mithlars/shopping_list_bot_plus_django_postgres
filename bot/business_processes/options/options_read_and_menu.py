@@ -12,6 +12,9 @@ from bot.create_bot import MyBot
 from bot.emoji import emoji
 from bot.translate import transl
 
+from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
+
 options_router = Router()
 
 """
@@ -27,7 +30,7 @@ class ShowOptionsMenu:
         """ function to switch language """
         # TODO: Переделать. Сделать так, чтобы список языков подтягивался автоматически для всей функции
         message_text_list = [
-            "Выберите язык:",
+            _("Choose language"),
             "1. 'bel', 'Беларуская'",
             "2. 'en', 'English'",
             "3. 'hy', 'Հայերեն'",
@@ -64,23 +67,23 @@ class ShowOptionsMenu:
         message_text = transl[lang]['options']['buttons_style']['message']
         buttons = transl[lang]['list_menu']['buttons']
         buttons_short = transl[lang]['list_menu']['buttons_short']
-        text_text = (f"⬜ "
+        text_text = (f"{emoji['off']} "
                      f"[{buttons['groups']}] "
                      f"[{buttons['lists']}]")
-        pics_text = "⬜ [🗃️] [📦]"
-        both_text = (f"⬜ "
-                     f"[🗃️{buttons_short['groups']}] "
-                     f"[📦{buttons_short['lists']}]")
+        pics_text = f"{emoji['off']} [{emoji['groups']}] [{emoji['lists']}]"
+        both_text = (f"{emoji['off']} "
+                     f"[{emoji['groups']}{buttons_short['groups']}] "
+                     f"[{emoji['lists']}{buttons_short['lists']}]")
         if telegram_buttons_style == "text":
-            text_text = (f"✅ "
+            text_text = (f"{emoji['on']} "
                          f"[{buttons['groups']}] "
                          f"[{buttons['lists']}]")
         elif telegram_buttons_style == "pics":
-            pics_text = "✅ [🗃️] [📦]"
+            pics_text = f"{emoji['on']} [{emoji['groups']}] [{emoji['lists']}]"
         else:
-            both_text = (f"✅ "
-                         f"[🗃️{buttons_short['groups']}] "
-                         f"[📦{buttons_short['lists']}]")
+            both_text = (f"{emoji['on']} "
+                         f"[{emoji['groups']}{buttons_short['groups']}] "
+                         f"[{emoji['lists']}{buttons_short['lists']}]")
         builder = InlineKeyboardBuilder()
         builder.add(
             InlineKeyboardButton(text=text_text, callback_data="buttons_style_switch text"),

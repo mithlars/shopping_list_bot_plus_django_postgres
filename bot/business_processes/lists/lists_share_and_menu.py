@@ -1,10 +1,8 @@
 from typing import Tuple
 
 from aiogram import Router
-from aiogram.types import Message, InlineKeyboardButton, CallbackQuery, KeyboardButton, InlineKeyboardMarkup, \
-    ReplyKeyboardMarkup
-from aiogram import F
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.types import Message, InlineKeyboardButton, CallbackQuery, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import update_last_request_time, django_auth
@@ -14,6 +12,8 @@ from bot.business_processes.lists.utils.share_menu_keyboard import share_menu_ke
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
 from bot.translate import transl
+
+from aiogram.utils.i18n import gettext as _
 
 lists_share_router = Router()
 
@@ -47,8 +47,7 @@ class ListsShareStart:
         builder.adjust(4)
         keyboard = builder.as_markup(resize_keyboard=True)
         if message_text == "":
-            message_text = ("У Вас пока нет списков.\nВернитесь в меню списков "
-                            "и нажмите \"➕📦\" чтобы создать новый список.")
+            message_text = _("You don't have lists yet.\nPleas go back to the lists menu and create new list")
         return message_text, keyboard
 
     @staticmethod
@@ -62,7 +61,7 @@ class ListsShareStart:
 
     @staticmethod
     async def lists_share_start(telegram_user_id: int):
-        message_1_text = "К какому списку Вы хотите дать доступ?:"
+        message_1_text = _("Which list you want to share?:")
         menu_keyboard = await share_menu_keyboard(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_1_text, reply_markup=menu_keyboard)
 
@@ -121,10 +120,10 @@ class ListShareChooseList:
         list_id = callback.data.split(" ")[1]
         friends_keyboard = await ListShareChooseList.get_friends_api(telegram_user_id, list_id)
         if not friends_keyboard.inline_keyboard:
-            message_text = "В Вашем окружении никого нет."
+            message_text = _("There's no one in your surroundings")
         else:
             list_name = await get_lists_detail_api(telegram_user_id, list_id)
-            message_text = f"Выберите кто из Вашего окружения может работать со списком \"{list_name}\":"
+            message_text = _("Choose who of your surroundings can work with the list").format(list_name=list_name)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text, reply_markup=friends_keyboard)
 
 
@@ -151,7 +150,7 @@ class ListShare:
         friend_id, move, list_id = callback.data.split(" ")[1:]
         response = await ListShare.share_list_api(telegram_user_id, friend_id, move, list_id)
         if response.status_code != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
         friends_keyboard = await ListShareChooseList.get_friends_api(telegram_user_id, list_id)
         await MyBot.bot.edit_message_reply_markup(chat_id=telegram_user_id,
                                                   message_id=message_id,

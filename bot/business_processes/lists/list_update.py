@@ -1,7 +1,8 @@
 from typing import Any, Dict
 
-from aiogram import Router, F, types
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, ReplyKeyboardRemove
+from aiogram import Router, F
+from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, ReplyKeyboardRemove, KeyboardButton, \
+    ReplyKeyboardMarkup
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -9,10 +10,14 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.create_bot import MyBot
 
 from bot.api.django_auth import update_last_request_time, django_auth
-from .lists_read_and_menu import ListsReadAndMenu
+from .list_change_current import ListChangeCurrent
 from .utils.lists_menu_keyboard import lists_menu_keyboard_buttons
 from ...constants import django_address, buttons_styles
+from ...emoji import emoji
 from ...translate import transl
+
+from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
 
 list_update_router = Router()
 
@@ -21,7 +26,7 @@ class UpdateListStart:
 
     @staticmethod
     async def data_processing(list_of_lists: list) -> Dict[str, Any]:
-        message_text = "Выберите список для редактирования:\n"
+        message_text = _("Choose list for edit\n")
         number = 1
         builder = InlineKeyboardBuilder()
         current_list_data = list_of_lists.pop()
@@ -65,9 +70,6 @@ class UpdateListStart:
         lambda message:
         any(message.text == lists_menu_keyboard_buttons(lang)[button_style]['edit']
             for lang in transl.keys() for button_style in buttons_styles)
-        # (F.text == '✏️️📦') |
-        # (F.text == "adit️📦") |
-        # (F.text == "изменить📦")
     )
     async def choose_list_for_update_handler(message: Message):
         telegram_user_id = message.from_user.id
@@ -84,13 +86,14 @@ class StatesUpdateList(StatesGroup):
 
 class UpdateListFMS:
 
-    kb = [[types.KeyboardButton(text="Без изменений"), types.KeyboardButton(text="✏️📦Отмена")]]
-    stop_same_kb = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-
     @staticmethod
     @list_update_router.callback_query(lambda c: c.data and c.data.startswith('update_list'))
     async def choose_list_for_update_handler(callback: CallbackQuery, state: FSMContext):
         await state.set_state(StatesUpdateList.name)
+
+        kb = [[KeyboardButton(text=_("No changes")),
+               KeyboardButton(text=emoji['edit'] + emoji['lists'] + _("Cancel"))]]
+        stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
         ald_lists_data = callback.data.split(", ")[1:]
         await state.update_data(list_id=ald_lists_data[0],
@@ -98,36 +101,42 @@ class UpdateListFMS:
                                 list_ald_description=ald_lists_data[2])
 
         await MyBot.bot.send_message(chat_id=callback.from_user.id,
-                                     text='Введите новое имя для списка',
-                                     reply_markup=UpdateListFMS.stop_same_kb)
+                                     text=_("Input new name for the list"),
+                                     reply_markup=stop_same_kb)
 
         await MyBot.bot.send_message(chat_id=callback.message.chat.id,
                                      text=f"`{ald_lists_data[1]}`",
                                      parse_mode='MarkdownV2')
 
     @staticmethod
-    @list_update_router.message(F.text.startswith('✏️📦Отмена'))
+    @list_update_router.message(F.text.replace(f"{emoji['edit']}{emoji['lists']}", "") == __('Cancel'))
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()
-        await ListsReadAndMenu.lists_read_and_menu(telegram_user_id)
+        await ListChangeCurrent.change_current_list(telegram_user_id)
 
     @staticmethod
     @list_update_router.message(StatesUpdateList.name)
     async def update_list_name_handler(message: Message, state: FSMContext):
-        if message.text == "Без изменений":
+
+        kb = [[KeyboardButton(text=_("No changes")),
+               KeyboardButton(text=_("Without description")),
+               KeyboardButton(text=emoji['edit'] + emoji['lists'] + _("Cancel"))]]
+        stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+
+        if message.text == _("No changes"):
             data = await state.get_data()
             await state.update_data(name=data["list_ald_name"])
         else:
             await state.update_data(name=message.text)
         await state.set_state(StatesUpdateList.description)
         await MyBot.bot.send_message(chat_id=message.chat.id,
-                                     text="Теперь введите новое описание",
-                                     reply_markup=UpdateListFMS.stop_same_kb)
+                                     text=_("Now input new description"),
+                                     reply_markup=stop_same_kb)
 
     @staticmethod
     @update_last_request_time(django_auth)
-    async def list_update_api(telegram_user_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def list_update_api(telegram_user_id: int, data: Dict[str, Any]) -> None:
         url = f"{django_address}/lists/create_update_new_list/"
         data["telegram_user_id"] = telegram_user_id
         await django_auth.session.put(url=url, data=data)
@@ -137,8 +146,10 @@ class UpdateListFMS:
     async def update_list_description_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         list_data = await state.get_data()
-        if message.text == "Без изменений":
+        if message.text == _("No changes"):
             list_data["description"] = list_data["list_ald_description"]
+        elif message.text == _("Without description"):
+            list_data["description"] = ""
         else:
             list_data["description"] = message.text
 
@@ -146,9 +157,9 @@ class UpdateListFMS:
         if (list_data['name'] == list_data["list_ald_name"]
                 and list_data["description"] == list_data["list_ald_description"]):
             await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                         text="Вы решили оставить данные списка без изменений.",
+                                         text=_("Your chose is leave the list without changes"),
                                          reply_markup=ReplyKeyboardRemove())
-            await ListsReadAndMenu.lists_read_and_menu(telegram_user_id)
+            await ListChangeCurrent.change_current_list(telegram_user_id)
         else:
             await UpdateListFMS.list_update_api(telegram_user_id, list_data)
-            await ListsReadAndMenu.lists_read_and_menu(telegram_user_id)
+            await ListChangeCurrent.change_current_list(telegram_user_id)

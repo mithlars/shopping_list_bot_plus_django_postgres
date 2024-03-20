@@ -7,9 +7,14 @@ from aiogram.types import Message, ReplyKeyboardRemove, InlineKeyboardButton, In
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.purchases.list_read_and_menu import ListRead
+from bot.business_processes.purchases.purchases_delete_and_list_menu import ListRead
 from bot.constants import django_address
 from bot.create_bot import MyBot
+
+from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
+
+from bot.emoji import emoji
 
 start_router = Router()
 
@@ -61,7 +66,8 @@ class PurchasesGetAndCategorize:
         for category in categories:
             callback_data = f"categorize;{category['id']};{status}"
             builder.add(InlineKeyboardButton(text=category['name'], callback_data=callback_data))
-        builder.add(InlineKeyboardButton(text="❌Отмена", callback_data="➕📋Отмена"))
+        builder.add(InlineKeyboardButton(text=emoji['delete'] + _("Cancel"),
+                                         callback_data=emoji['add'] + emoji['list'] + _("Cancel")))
         if status == 'same':
             builder.add(InlineKeyboardButton(text="Разные", callback_data="categorize;dif;dif"))
         else:
@@ -93,11 +99,12 @@ class PurchasesGetAndCategorize:
         await MyBot.bot.send_message(chat_id=telegram_user_id, text="из списка:", reply_markup=categorize_keyboard)
 
     @staticmethod
-    @purchases_add_router.callback_query(lambda c: c.data and c.data == "➕📋Отмена")
+    @purchases_add_router.callback_query(
+        lambda c: c.data and c.data.replace(f"{emoji['add']}{emoji['list']}", "") == __("Cancel"))
     async def cansel_categorize_handler(callback: CallbackQuery, state: FSMContext):
         telegram_user_id = callback.from_user.id
         await state.clear()
-        await MyBot.bot.send_message(telegram_user_id, "OK, введенные данные удалены.")
+        await MyBot.bot.send_message(telegram_user_id, _("OK, inputted data is deleted"))
         await ListRead.get_current_lists_purchases_list(telegram_user_id)
 
     @staticmethod
@@ -180,7 +187,8 @@ class Categorize:
                 # Replace categorized purchase to spacial list
                 categorized_purchases_list.append(non_categorized_purchases_list.pop())
 
-            text = f"Выберите категорию для позиции\n{non_categorized_purchases_list[-1]['name']}:"
+            text = _("Choose category for new list position\n{purchase_name}:"
+                     ).format(purchase_name=non_categorized_purchases_list[-1]['name'])
             categorize_keyboard = await PurchasesGetAndCategorize.categorize_keyboard_builder(telegram_user_id, status)
             # Next step of categorizing:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=categorize_keyboard)
@@ -203,7 +211,7 @@ class Categorize:
             telegram_user_id: int
     ):
         if category_id == "dif":
-            text = f"Выберите категорию для остальных позиций:\n"
+            text = _("Choose category for other new list positions ")
             for purchase in non_categorized_purchases_list:
                 text += f"{purchase['name']}"
                 purchase_description = purchase.get('description', "")
@@ -278,9 +286,9 @@ class PurchaseAdd:
         # Add to message_text added purchases, grouped by categories:
         number = 1
         if data['added'] == {}:
-            message_text += "Все эти позиции уже есть в списке:\n"
+            message_text += _("All of this positions are already in the list\n")
         else:
-            message_text += "Позиции добавленные в список:\n"
+            message_text += _("Positions which added to the list:\n")
             for category_name in data['added'].keys():
                 message_text += f"____{category_name}\n"
                 for purchase in data['added'][f"{category_name}"]:
@@ -295,7 +303,7 @@ class PurchaseAdd:
         number = 1
         if data['existed'] != {}:
             if data['added'] != {}:
-                message_text += "\nСледующие позиции уже есть в списке\n"
+                message_text += _("\nThe following positions are already in the list\n")
             for category_name in data['existed'].keys():
                 message_text += f"____{category_name}\n"
                 for purchase in data['existed'][f'{category_name}']:

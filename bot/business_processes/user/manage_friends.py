@@ -15,7 +15,11 @@ from bot.create_bot import MyBot
 from ..lists.lists_share_and_menu import ListsShareStart
 from ..lists.utils.share_menu_keyboard import share_menu_keyboard_buttons
 from ...constants import django_address, buttons_styles
+from ...emoji import emoji
 from ...translate import transl
+
+from aiogram.utils.i18n import gettext as _
+from aiogram.utils.i18n import lazy_gettext as __
 
 manage_friends_router = Router()
 
@@ -25,7 +29,7 @@ class FriendsList:
     @staticmethod
     async def processing_data(friends_data: list) -> Tuple[str, InlineKeyboardMarkup]:
         builder = InlineKeyboardBuilder()
-        message_text = 'Ваше окружение:\n'
+        message_text = _("Your surrounding:\n")
         number = 1
         for friend in friends_data:
             friend_id = friend['pk']
@@ -39,10 +43,10 @@ class FriendsList:
         builder.add(InlineKeyboardButton(text="Добавить", callback_data=f"add_friend"))
         builder.adjust(6, -1)
         keyboard = builder.as_markup(resize_keyboard=True)
-        if message_text == 'Ваше окружение:\n':
-            message_text = "В вашем окружении никого нет."
+        if message_text == _("Your surrounding:\n"):
+            message_text = _("Your surrounding is empty.")
         else:
-            message_text += "\n(нажмите номер пользователя для удаления из окружения)"
+            message_text += _("\n(press user's number to delete him/her from your surrounding)")
         return message_text, keyboard
 
     @staticmethod
@@ -63,7 +67,6 @@ class FriendsList:
         lambda message:
         any(message.text == share_menu_keyboard_buttons(lang)[button_style]['surrounding']
             for lang in transl.keys() for button_style in buttons_styles)
-        # F.text == "Окружение"
     )
     async def friends_list_handler(message: Message):
         telegram_user_id = message.from_user.id
@@ -90,7 +93,7 @@ class DeleteFriend:
         friend_id = callback.data.split(" ")[1]
         response = await DeleteFriend.delete_friend_api(telegram_user_id, friend_id)
         if response.status_code != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
         await FriendsList.friends_list(telegram_user_id)
     # TODO: Доделать DeleteFriend.
     #  1. Удалить доступы
@@ -113,18 +116,15 @@ class AddFriendByCommand:
         response = await django_auth.session.put(url=url, data=data)
         return response
 
-    @staticmethod
-    @manage_friends_router.message(F.text.startswith("Добавить в друзья пользователя"))
+    @staticmethod  # TODO: Переделать так, чтобы язык брался из сообщения
+    @manage_friends_router.message(F.text.split(':')[0] == __("Add user to my surrounding"))
     async def add_user_to_friends_handler(message: Message):
         telegram_user_id = message.from_user.id
-        friend_id = message.text.split(':')[1]
+        friend_id = message.text.split(':')[2]
         response = await AddFriendByCommand.add_remove_friend_api(telegram_user_id, friend_id=friend_id)
         if response.status_code != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
         await ListsShareStart.lists_share_start(telegram_user_id)
-
-
-
 
 
 class AddFriendManual:
@@ -138,16 +138,14 @@ class AddFriendManual:
     async def add_new_friend_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
         builder = InlineKeyboardBuilder()
-        builder.add(InlineKeyboardButton(text="User name", callback_data="add_friend_by_username"))
-        builder.add(InlineKeyboardButton(text="telegram_id", callback_data="add_friend_by_telegram_id"))
+        builder.add(InlineKeyboardButton(text=_("username"), callback_data="add_friend_by_username"))
+        builder.add(InlineKeyboardButton(text=_("telegram_id"), callback_data="add_friend_by_telegram_id"))
         keyboard = builder.as_markup(resize_keyboard=True)
-        text = "Какие данные о пользователе у Вас есть?"
+        text = _("What user data do you have?")
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=keyboard)
 
-    stop_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="➕👨‍👦‍👦‍Отмена")]], resize_keyboard=True)
-
     @staticmethod
-    @manage_friends_router.message(F.text.startswith("➕👨‍👦‍👦‍Отмена"))
+    @manage_friends_router.message(F.text.replace(f"{emoji['add']}{emoji['share']}", "") == __("Cancel"))
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()
@@ -159,11 +157,14 @@ class AddFriendByUsername:
     @staticmethod
     @manage_friends_router.callback_query(lambda c: c.data and c.data == "add_friend_by_username")
     async def add_new_friend_by_username_handler(callback: CallbackQuery, state: FSMContext):
+        stop_keyboard = ReplyKeyboardMarkup(
+            keyboard=[[KeyboardButton(text=emoji['add'] + emoji['share'] + _("Cancel"))]],
+            resize_keyboard=True)
         telegram_user_id = callback.from_user.id
         await state.set_state(AddFriendManual.State.friend_username)
         await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                     text="Пришлите username пользователя:",
-                                     reply_markup=AddFriendManual.stop_keyboard)
+                                     text=_("Send user username:"),
+                                     reply_markup=stop_keyboard)
 
     @staticmethod
     @manage_friends_router.message(AddFriendManual.State.friend_username)
@@ -177,7 +178,7 @@ class AddFriendByUsername:
             message_text = response.json()["error"]
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
         elif response.status_code != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
         await ListsShareStart.lists_share_start(telegram_user_id)
 
 
@@ -186,11 +187,14 @@ class AddFriendByTelegramID:
     @staticmethod
     @manage_friends_router.callback_query(lambda c: c.data and c.data == "add_friend_by_telegram_id")
     async def add_new_friend_by_id_handler(callback: CallbackQuery, state: FSMContext):
+        stop_keyboard = ReplyKeyboardMarkup(
+            keyboard=[[KeyboardButton(text=emoji['add'] + emoji['share'] + _("Cancel"))]],
+            resize_keyboard=True)
         telegram_user_id = callback.from_user.id
         await state.set_state(AddFriendManual.State.friend_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id,
-                                     text="Пришлите telegram_id пользователя:",
-                                     reply_markup=AddFriendManual.stop_keyboard)
+                                     text=_("Send user telegram_id:"),
+                                     reply_markup=stop_keyboard)
 
     @staticmethod
     @manage_friends_router.message(AddFriendManual.State.friend_id)
@@ -203,7 +207,7 @@ class AddFriendByTelegramID:
             message_text = response.json()["error"]
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
         elif response.status_code != 200:
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="Что-то пошло не так...")
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("Somthing went rong"))
         await ListsShareStart.lists_share_start(telegram_user_id)
 
 
@@ -214,16 +218,20 @@ class AddMeToFriends:
         lambda message:
         any(message.text == share_menu_keyboard_buttons(lang)[button_style]['add_me']
             for lang in transl.keys() for button_style in buttons_styles)
-        # F.text == "Добавь меня"
     )
     async def add_me_to_friends_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
         telegram_user_firstname = callback.from_user.first_name
         telegram_user_lastname = callback.from_user.last_name
-        message_text = ("Перешлите сообщение-команду ниже другому пользователю "
-                        "и попросите его переслать его в чат с ботом, "
-                        "чтобы пользователь мог дать Вам доступ к своим спискам:")
+
+        message_text = _("Send the message-command below to another user "
+                         "and ask him/her to send it to the chat with the bot "
+                         "so that the user can give you access to his/her lists:")
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
-        text = (f"\nДобавить в друзья пользователя {telegram_user_firstname} {telegram_user_lastname}"
-                f" с id:{telegram_user_id}")
+
+        text = _("Add user to my surrounding: {telegram_user_firstname} "
+                 "{telegram_user_lastname} with id:{telegram_user_id}"
+                 ).format(telegram_user_firstname=telegram_user_firstname,
+                          telegram_user_lastname=telegram_user_lastname,
+                          telegram_user_id=telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=text)
