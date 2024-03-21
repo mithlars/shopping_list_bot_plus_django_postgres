@@ -195,7 +195,7 @@ msgstr ""
 
 #: bot/business_processes/lists/list_create.py:52
 #: bot/business_processes/lists/list_create.py:68
-msgid "{add}{lists}Cansel"
+msgid "{add}{lists}Cancel"
 msgstr ""
 
 #: bot/business_processes/lists/list_create.py:55

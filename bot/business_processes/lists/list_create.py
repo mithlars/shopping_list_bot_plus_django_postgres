@@ -49,7 +49,7 @@ class ListCreateHandler:
             for lang in transl.keys() for button_style in buttons_styles)
     )
     async def create_new_list_handler(message: Message, state: FSMContext):
-        kb = [[KeyboardButton(text=_("{add}{lists}Cansel").format(add=emoji['add'], lists=emoji['lists']))]]
+        kb = [[KeyboardButton(text=_("{add}{lists}Cancel").format(add=emoji['add'], lists=emoji['lists']))]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.set_state(StatesNewList.name)
         await MyBot.bot.send_message(message.chat.id, _("Input new list name"), reply_markup=stop_kb)
@@ -65,7 +65,7 @@ class ListCreateHandler:
     @list_create_router.message(StatesNewList.name)
     async def add_name_for_new_list_handler(message: Message, state: FSMContext):
         kb = [[KeyboardButton(text=_("Without description")),
-               KeyboardButton(text=_("{add}{lists}Cansel").format(add=emoji['add'], lists=emoji['lists']))]]
+               KeyboardButton(text=_("{add}{lists}Cancel").format(add=emoji['add'], lists=emoji['lists']))]]
         stop_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.update_data(name=message.text, description="")
         await state.set_state(StatesNewList.description)
