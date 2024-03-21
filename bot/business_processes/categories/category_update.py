@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, ReplyKey
     KeyboardButton, ReplyKeyboardMarkup
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 from requests import Response
 
 from bot.business_processes.categories.utils.categories_menu_keyboard import categories_menu_keyboard_builder, \
@@ -101,13 +101,19 @@ class UpdateCategoryFMS:
 
     @staticmethod
     async def get_stop_keyboard(lang: str, description: bool = False) -> ReplyKeyboardMarkup:
-        cancel = transl[lang]['buttons']['cancel']
+        builder = ReplyKeyboardBuilder()
+
         no_chngs = transl[lang]['buttons']['no_chngs']
-        kb = [[KeyboardButton(text=no_chngs), KeyboardButton(text=f"{emoji['edit']}{emoji['categories']}{cancel}")]]
+        builder.add(KeyboardButton(text=no_chngs))
+
         if description:
             no_descr = transl[lang]['buttons']['no_descr']
-            kb[0].append(KeyboardButton(text=no_descr))
-        return ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+            builder.add(KeyboardButton(text=no_descr))
+
+        cancel = transl[lang]['buttons']['cancel']
+        builder.add(KeyboardButton(text=f"{emoji['edit']}{emoji['categories']}{cancel}"))
+
+        return builder.as_markup(resize_keyboard=True)
 
     @staticmethod
     @category_update_router.callback_query(lambda c: c.data and c.data.startswith('category_update'))
@@ -155,7 +161,7 @@ class UpdateCategoryFMS:
         else:
             await state.update_data(name=message.text)
         await state.set_state(StatesUpdateCategory.description)
-        stop_same_kb = UpdateCategoryFMS.get_stop_keyboard(lang, description=True)
+        stop_same_kb = await UpdateCategoryFMS.get_stop_keyboard(lang, description=True)
         await MyBot.bot.send_message(chat_id=message.chat.id,
                                      text=update_tr['input_new_cat_descr'],
                                      reply_markup=stop_same_kb)
