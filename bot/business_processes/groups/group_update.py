@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, KeyboardButton, \
     ReplyKeyboardMarkup, ReplyKeyboardRemove
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
@@ -18,6 +18,7 @@ from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
 
 from bot.emoji import emoji
+from bot.translate import transl
 
 # from bot.business_processes.groups.utils.groups_menu_keyboard import GroupsRead
 
@@ -79,15 +80,22 @@ class GroupUpdateFMS:
         response = django_auth.session.get(url=url, data=data)
         return response.json()
 
+    @staticmethod
+    async def get_stop_keyboard(description: bool = False) -> ReplyKeyboardMarkup:
+        builder = ReplyKeyboardBuilder()
 
+        builder.add(KeyboardButton(text=_("No changes")))
+
+        if description:
+            builder.add(KeyboardButton(text=_("Without description")))
+
+        builder.add(KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel")))
+
+        return builder.as_markup(resize_keyboard=True)
 
     @staticmethod
     @group_update_router.callback_query(lambda c: c.data and c.data.startswith('group_update'))
     async def choose_group_for_update_handler(callback: CallbackQuery, state: FSMContext):
-        kb = [[KeyboardButton(text=_("No changes")),
-               KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel"))]]
-        stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-
         telegram_user_id = callback.from_user.id
         await state.set_state(GroupUpdateState.name)
 
@@ -98,6 +106,7 @@ class GroupUpdateFMS:
         await state.update_data(group_id=group_id,
                                 group_ald_name=group_ald_name,
                                 group_ald_description=group_ald_description)
+        stop_same_kb = await GroupUpdateFMS.get_stop_keyboard()
         await MyBot.bot.send_message(chat_id=telegram_user_id,
                                      text=_('Input new group name'),
                                      reply_markup=stop_same_kb)
@@ -121,11 +130,9 @@ class GroupUpdateFMS:
             await state.update_data(name=data["group_ald_name"])
         else:
             await state.update_data(name=message.text)
-        kb = [[KeyboardButton(text=_("No changes")),
-               KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel")),
-               KeyboardButton(text=_("Without description"))]]
-        stop_same_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
         await state.set_state(GroupUpdateState.description)
+
+        stop_same_kb = await GroupUpdateFMS.get_stop_keyboard(description=True)
         await MyBot.bot.send_message(chat_id=message.chat.id,
                                      text=_("Now input new description"),
                                      reply_markup=stop_same_kb)
