@@ -31,7 +31,7 @@ from constants import admin_telegram_id, startup_admin_message
 from bot.api.django_auth import django_auth
 from create_bot import MyBot
 from aiogram import Bot
-from bot.business_processes.purchases.purchases_delete_and_list_menu import purchases_delete_and_list_menu
+from bot.business_processes.purchases.purchase_delete_and_list_menu import purchases_delete_and_list_menu
 from bot.business_processes.user.user_create_start import start_router
 
 

@@ -6,7 +6,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
 
 from bot.api.django_auth import django_auth, update_last_request_time
-from bot.business_processes.purchases.purchases_delete_and_list_menu import ListRead
+from bot.business_processes.purchases.purchase_delete_and_list_menu import ListRead
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
