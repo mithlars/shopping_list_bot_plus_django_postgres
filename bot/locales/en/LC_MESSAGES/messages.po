@@ -410,7 +410,8 @@ msgstr ""
 msgid ""
 "Send the message-command below to another user and ask him/her to send it"
 " to the chat with the bot so that the user can give you access to his/her"
-" lists:"
+" lists.\n"
+"Both must be configured with the same language."
 msgstr ""
 
 #: bot/business_processes/user/manage_friends.py:232

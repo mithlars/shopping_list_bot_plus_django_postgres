@@ -226,7 +226,8 @@ class AddMeToFriends:
 
         message_text = _("Send the message-command below to another user "
                          "and ask him/her to send it to the chat with the bot "
-                         "so that the user can give you access to his/her lists:")
+                         "so that the user can give you access to his/her lists.\n"
+                         "Both must be configured with the same language.")
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=message_text)
 
         text = _("Add user to my surrounding: {telegram_user_firstname} "

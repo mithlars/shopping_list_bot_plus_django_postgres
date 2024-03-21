@@ -438,11 +438,13 @@ msgstr "Пришлите идентификатор (id) пользовател�
 msgid ""
 "Send the message-command below to another user and ask him/her to send it"
 " to the chat with the bot so that the user can give you access to his/her"
-" lists:"
+" lists.\n"
+"Both must be configured with the same language."
 msgstr ""
 "Перешлите сообщение-команду ниже другому пользователю и попросите его "
 "переслать его в чат с ботом, чтобы пользователь мог дать Вам доступ к "
-"своим спискам:"
+"своим спискам.\n"
+"Необходимо, чтобы у обоих был настроен один о тот же язык."
 
 #: bot/business_processes/user/manage_friends.py:232
 msgid ""
