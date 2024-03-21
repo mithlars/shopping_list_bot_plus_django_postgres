@@ -3,6 +3,7 @@ RUN mkdir /app
 WORKDIR /app
 RUN pip3 install aiogram==3.0.0
 RUN pip3 install requests==2.31.0
+RUN pip3 install Babel
 RUN chmod 755 .
 COPY bot ./bot/
 COPY __init__.py .
