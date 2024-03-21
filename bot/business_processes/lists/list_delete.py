@@ -44,7 +44,8 @@ class ListDeleteStart:
             while i <= count_own // 5:  # Processing *args of keys lines in keyboard with width in 5 buttons
                 adjust.append(5)
                 i += 1
-            adjust.append(count_own % 5)  # Last line of own lists buttons width arg for keyboard
+            if count_own % 5 > 0:
+                adjust.append(count_own % 5)  # Last line of own lists buttons width arg for keyboard
         if count_shared > 0:
             for button in buttons_shared:
                 builder.add(button)  # Adding shared lists buttons to keyboard
@@ -52,7 +53,8 @@ class ListDeleteStart:
             while i <= count_shared // 5:  # Processing *args of keys lines in keyboard with width in 5 buttons
                 adjust.append(5)
                 i += 1
-            adjust.append(count_shared % 5)  # Last line of shared lists buttons width arg for keyboard
+            if count_shared % 5 > 0:
+                adjust.append(count_shared % 5)  # Last line of shared lists buttons width arg for keyboard
         builder.adjust(*adjust)  # Set the inline-keyboard lines widths
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
