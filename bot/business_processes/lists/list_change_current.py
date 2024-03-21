@@ -18,7 +18,7 @@ class ListChangeCurrentDataProcessing:
 
     @staticmethod
     async def data_processing(list_of_lists: list) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = ""
+        message_text = _("Choose list to switch on it:\n")
         number = 1
         builder = InlineKeyboardBuilder()
         current_list_data = list_of_lists.pop()
