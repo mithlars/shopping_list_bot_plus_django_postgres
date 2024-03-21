@@ -21,7 +21,7 @@ class PurchaseCategorizeOneStart:
 
     @staticmethod
     async def data_processing(list_data: list) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = ""
+        message_text = _("Choose position to categorize:\n")  # Выберите позицию для добавления в категорию:\n
         number_count = 1
         builder = InlineKeyboardBuilder()
         for category_dict in list_data:

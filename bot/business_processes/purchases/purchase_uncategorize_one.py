@@ -21,7 +21,7 @@ class PurchaseUncategorizeOneStart:
 
     @staticmethod
     async def data_processing(list_data: list, blank_category_id: int) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = ""
+        message_text = _("Choose position to uncategorize:\n")  # Выберите позицию для удаления связи с категорией:\n
         number_count = 1
         builder = InlineKeyboardBuilder()
         for category_dict in list_data:

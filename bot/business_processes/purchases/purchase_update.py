@@ -27,7 +27,7 @@ class PurchaseUpdateStart:
 
     @staticmethod
     async def data_processing(list_data: list) -> Tuple[str, InlineKeyboardMarkup]:
-        message_text = ""
+        message_text = _("Choose position to edit:\n")  # Выберите позицию для редактирования:\n
         number = 1
         builder = InlineKeyboardBuilder()
         for category_dict in list_data:

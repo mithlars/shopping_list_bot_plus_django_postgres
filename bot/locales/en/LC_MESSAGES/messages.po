@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-21 13:54+0400\n"
+"POT-Creation-Date: 2024-03-21 14:42+0400\n"
 "PO-Revision-Date: 2024-03-17 21:04+0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -81,7 +81,7 @@ msgstr ""
 #: bot/business_processes/groups/group_update.py:163
 #: bot/business_processes/lists/list_change_current.py:105
 #: bot/business_processes/lists/list_create.py:86
-#: bot/business_processes/lists/list_delete.py:250
+#: bot/business_processes/lists/list_delete.py:252
 #: bot/business_processes/lists/lists_share_and_menu.py:153
 #: bot/business_processes/purchases/purchase_categorize_one.py:209
 #: bot/business_processes/purchases/purchase_categorize_one.py:231
@@ -214,49 +214,50 @@ msgstr ""
 msgid "_____Other user lists:\n"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:65
+#: bot/business_processes/lists/list_delete.py:67
 msgid "Choose list to delete:\n"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:66
+#: bot/business_processes/lists/list_delete.py:68
 msgid ""
 "\n"
 "\\_\\_\\_\\_\\_Your own lists:\n"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:71
+#: bot/business_processes/lists/list_delete.py:73
 msgid ""
 "\n"
 "\\_\\_\\_\\_\\_Other user lists:\n"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:106
+#: bot/business_processes/lists/list_delete.py:108
 msgid ""
 "\n"
-"Hint:\nYou can fully delete only your own lists ({delete}), and delete access "
+"Hint:\n"
+"You can fully delete only your own lists ({delete}), and delete access "
 "for lists of other users ({blind})"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:167
+#: bot/business_processes/lists/list_delete.py:169
 msgid "    empty\n"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:179
+#: bot/business_processes/lists/list_delete.py:181
 msgid "Yes! I wont to delete the list!"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:181
+#: bot/business_processes/lists/list_delete.py:183
 msgid "No! I've changed my mind!"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:207
+#: bot/business_processes/lists/list_delete.py:209
 msgid ""
 "Are you sure you want to delete the list \n"
 "\"{list_name}\":\n"
 "Here’s its contents:"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:239
+#: bot/business_processes/lists/list_delete.py:241
 #: bot/business_processes/purchases/purchase_categorize_one.py:144
 #: bot/business_processes/purchases/purchase_categorize_one.py:199
 #: bot/business_processes/purchases/purchase_uncategorize_one.py:134
@@ -264,7 +265,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: bot/business_processes/lists/list_delete.py:246
+#: bot/business_processes/lists/list_delete.py:248
 msgid "You cannot delete a list if it is single"
 msgstr ""
 
@@ -330,6 +331,10 @@ msgid ""
 "The following positions are already in the list\n"
 msgstr ""
 
+#: bot/business_processes/purchases/purchase_categorize_one.py:24
+msgid "Choose position to categorize:\n"
+msgstr ""
+
 #: bot/business_processes/purchases/purchase_categorize_one.py:43
 #: bot/business_processes/purchases/purchase_delete_and_list_menu.py:45
 #: bot/business_processes/purchases/purchase_uncategorize_one.py:44
@@ -352,11 +357,20 @@ msgstr ""
 #: bot/business_processes/purchases/purchase_delete_and_list_menu.py:47
 msgid ""
 "\n"
-"Hint:\nPress number-button to delete unit:"
+"Hint:\n"
+"Press number-button to delete unit:"
 msgstr ""
 
 #: bot/business_processes/purchases/purchase_delete_and_list_menu.py:69
 msgid "List \"{list_name}\""
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_uncategorize_one.py:24
+msgid "Choose position to uncategorize:\n"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_update.py:30
+msgid "Choose position to edit:\n"
 msgstr ""
 
 #: bot/business_processes/purchases/purchase_update.py:123
@@ -379,7 +393,8 @@ msgstr ""
 #: bot/business_processes/user/manage_friends.py:49
 msgid ""
 "\n"
-"Hint:\nPress user's number to delete him/her from your surrounding:"
+"Hint:\n"
+"Press user's number to delete him/her from your surrounding:"
 msgstr ""
 
 #: bot/business_processes/user/manage_friends.py:120
@@ -414,10 +429,9 @@ msgid ""
 "Both must be configured with the same language."
 msgstr ""
 
-#: bot/business_processes/user/manage_friends.py:232
+#: bot/business_processes/user/manage_friends.py:233
 msgid ""
 "Add user to my surrounding: {telegram_user_firstname} "
 "{telegram_user_lastname} with id:{telegram_user_id}"
 msgstr ""
-
 
