@@ -43,6 +43,8 @@ class ListRead:
                     number_count += 1
         if message_text == "":
             message_text = _("List (group) is steel empty")
+        else:
+            message_text += _("\nHint:\nPress number-button to delete unit:")
         keyboard = builder.as_markup(resize_keyboard=True)
         return message_text, keyboard
 

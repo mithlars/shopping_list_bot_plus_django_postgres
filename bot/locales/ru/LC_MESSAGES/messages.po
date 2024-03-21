@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 18:34+0400\n"
+"POT-Creation-Date: 2024-03-21 13:54+0400\n"
 "PO-Revision-Date: 2024-03-17 21:04+0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -245,11 +245,11 @@ msgstr ""
 #: bot/business_processes/lists/list_delete.py:106
 msgid ""
 "\n"
-"You can fully delete only your own lists ({delete}), and delete access "
+"Hint:\nYou can fully delete only your own lists ({delete}), and delete access "
 "for lists of other users ({blind})"
 msgstr ""
 "\n"
-"Свои списки можно удалить полностью ({delete}), а к спискам других "
+"Подсказка:\nСвои списки можно удалить полностью ({delete}), а к спискам других "
 "пользователей можно только удалить доступ ({blind})"
 
 #: bot/business_processes/lists/list_delete.py:167
@@ -357,9 +357,9 @@ msgstr ""
 "Следующие позиции уже есть в списке\n"
 
 #: bot/business_processes/purchases/purchase_categorize_one.py:43
+#: bot/business_processes/purchases/purchase_delete_and_list_menu.py:45
 #: bot/business_processes/purchases/purchase_uncategorize_one.py:44
 #: bot/business_processes/purchases/purchase_update.py:54
-#: bot/business_processes/purchases/purchases_delete_and_list_menu.py:45
 msgid "List (group) is steel empty"
 msgstr "Список (группа) пока пуст(ая)."
 
@@ -375,6 +375,16 @@ msgstr "Оставить"
 msgid "Remove this item from the previous category?"
 msgstr "Удалить позицию из предыдущей категории?"
 
+#: bot/business_processes/purchases/purchase_delete_and_list_menu.py:47
+msgid ""
+"\n"
+"Hint:\nPress number-button to delete unit:"
+msgstr "\nПодсказка:\nНажмите на кнопку с номером позиции, чтобы удалить ее:"
+
+#: bot/business_processes/purchases/purchase_delete_and_list_menu.py:69
+msgid "List \"{list_name}\""
+msgstr "Список \"{list_name}\":"
+
 #: bot/business_processes/purchases/purchase_update.py:123
 msgid "Input new name for new list position"
 msgstr "Введите новое имя для позиции списка"
@@ -382,10 +392,6 @@ msgstr "Введите новое имя для позиции списка"
 #: bot/business_processes/purchases/purchase_update.py:185
 msgid "Your chose is leave the list position without changes"
 msgstr "Вы решили оставить данные позиции списка без изменений."
-
-#: bot/business_processes/purchases/purchases_delete_and_list_menu.py:67
-msgid "List \"{list_name}\""
-msgstr "Список \"{list_name}\":"
 
 #: bot/business_processes/user/manage_friends.py:32
 #: bot/business_processes/user/manage_friends.py:46
@@ -399,14 +405,14 @@ msgstr "В вашем окружении никого нет."
 #: bot/business_processes/user/manage_friends.py:49
 msgid ""
 "\n"
-"(press user's number to delete him/her from your surrounding)"
+"Hint:\nPress user's number to delete him/her from your surrounding:"
 msgstr ""
 "\n"
-"(нажмите номер пользователя для удаления его из окружения)"
+"Подсказка:\nНажмите номер пользователя для удаления его из окружения:"
 
 #: bot/business_processes/user/manage_friends.py:120
 msgid "Add user to my surrounding"
-msgstr "Добавить пользователя в мое окружение"
+msgstr "Добавить в мое окружение пользователя"
 
 #: bot/business_processes/user/manage_friends.py:141
 msgid "username"
@@ -440,10 +446,10 @@ msgstr ""
 
 #: bot/business_processes/user/manage_friends.py:232
 msgid ""
-"Add user to my surrounding {telegram_user_firstname} "
+"Add user to my surrounding: {telegram_user_firstname} "
 "{telegram_user_lastname} with id:{telegram_user_id}"
 msgstr ""
 "\n"
-"Добавить в друзья пользователя {telegram_user_firstname} "
+"Добавить в мое окружение пользователя: {telegram_user_firstname} "
 "{telegram_user_lastname} с id:{telegram_user_id}"
 

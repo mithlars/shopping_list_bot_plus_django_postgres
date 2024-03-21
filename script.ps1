@@ -3,7 +3,8 @@ echo "start"
 $POSTGRES_PASSWORD = [Environment]::GetEnvironmentVariable("POSTGRES_PASSWORD")
 $DJANGO_USERNAME = [Environment]::GetEnvironmentVariable("DJANGO_USERNAME")
 $DJANGO_USER_PASSWORD = [Environment]::GetEnvironmentVariable("DJANGO_USER_PASSWORD")
-$API_TOKEN = [Environment]::GetEnvironmentVariable("API_TOKEN")
+$API_TOKEN = [Environment]::GetEnvironmentVariable("API_PROD_TEST_TOKEN")
+
 
 ssh -i C:\Users\lars5\.ssh\id_rsa root@165.227.159.101 @"
 #!/bin/bash
@@ -25,7 +26,7 @@ echo "removing docker-network named shopping_list_net:"
 docker network rm shopping_list_net
 echo "creating docker-network named shopping_list_net:"
 docker network create --subnet=172.18.0.0/16 shopping_list_net
-
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Добавить копироваие папки locals v kontejner bota
 echo "moving to /home/django_bot"
 cd /home/django_bot
 echo "removing old version code"

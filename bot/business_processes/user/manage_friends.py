@@ -46,7 +46,7 @@ class FriendsList:
         if message_text == _("Your surrounding:\n"):
             message_text = _("Your surrounding is empty.")
         else:
-            message_text += _("\n(press user's number to delete him/her from your surrounding)")
+            message_text += _("\nHint:\nPress user's number to delete him/her from your surrounding:")
         return message_text, keyboard
 
     @staticmethod

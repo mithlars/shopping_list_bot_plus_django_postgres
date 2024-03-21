@@ -105,7 +105,7 @@ class ListDeleteStart:
         # Assembling keyboard and final message text:
         message_text, keyboard = \
             await ListDeleteStart.join_data(message_text, text_own, text_shared, buttons_own, buttons_shared)
-        message_text += _("\nYou can fully delete only your own lists ({delete}), "
+        message_text += _("\nHint:\nYou can fully delete only your own lists ({delete}), "
                           "and delete access for lists of other users ({blind})"
                           ).format(delete=emoji['delete'], blind=emoji['blind'])
         return message_text, keyboard
