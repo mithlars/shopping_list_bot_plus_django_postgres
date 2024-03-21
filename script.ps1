@@ -26,7 +26,6 @@ echo "removing docker-network named shopping_list_net:"
 docker network rm shopping_list_net
 echo "creating docker-network named shopping_list_net:"
 docker network create --subnet=172.18.0.0/16 shopping_list_net
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Добавить копироваие папки locals v kontejner bota
 echo "moving to /home/django_bot"
 cd /home/django_bot
 echo "removing old version code"
