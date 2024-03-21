@@ -18,7 +18,7 @@ def lists_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'add': emoji['add'] + emoji['lists'],
             'share': emoji['share'],
             'delete': emoji['lists'] + emoji['delete'],
-            'clean': emoji['lists'] + emoji['clean'],
+            # 'clean': emoji['lists'] + emoji['clean'],
             'back': emoji['back'] + emoji['list']
         },
         'text': {  # 'text': ["сменить📦", "изменить📦", "создать📦", "доступ", "удалить📦", "очистить📦", "назад"],
@@ -27,7 +27,7 @@ def lists_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'add': buttons_long['add'] + emoji['lists'],
             'share': buttons_long['share'],
             'delete': buttons_long['delete'] + emoji['lists'],
-            'clean': buttons_long['clean'] + emoji['lists'],
+            # 'clean': buttons_long['clean'] + emoji['lists'],
             'back': buttons_long['back'] + emoji['list']
         },
         'both': {  # 'both': ["🔀📦смен.", "✏️️📦изм.", "➕📦созд.", "👨‍👦‍👦‍дост.", "📦❌удал.", "📦🧹очис.", "↩️📋"]
@@ -36,7 +36,7 @@ def lists_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'add': emoji['add'] + emoji['lists'] + buttons_short['add'],
             'share': emoji['share'] + buttons_short['share'],
             'delete': emoji['lists'] + emoji['delete'] + buttons_short['delete'],
-            'clean': emoji['lists'] + emoji['clean'] + buttons_short['clean'],
+            # 'clean': emoji['lists'] + emoji['clean'] + buttons_short['clean'],
             'back': emoji['back'] + emoji['list'] + buttons_short['back']
         },
     }
