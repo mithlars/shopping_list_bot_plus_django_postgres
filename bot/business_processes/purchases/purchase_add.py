@@ -59,9 +59,10 @@ class PurchasesGetAndCategorize:
         return response.json()
 
     @staticmethod
-    async def categorize_keyboard_builder(status: str, telegram_user_id: int = None, categories: list = None) -> InlineKeyboardMarkup:
+    async def categorize_keyboard_builder(status: str, telegram_user_id: int = None, categories: list = None
+                                          ) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        if not categories:
+        if categories is not None:
             categories = await PurchasesGetAndCategorize.gat_categories_api(telegram_user_id)
         for category in categories:
             callback_data = f"categorize;{category['id']};{status}"
