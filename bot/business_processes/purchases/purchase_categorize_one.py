@@ -200,7 +200,6 @@ class PurchaseCategorize:
             await ListRead.get_current_lists_purchases_list(telegram_user_id)
 
         elif command == 'start':
-            # category_id, purchase_id, category_from_id = int(category_id), int(purchase_id), int(category_from_id)
             blank_category_id = await PurchaseCategorize.get_blank_category_api(telegram_user_id)
             if int(category_from_id) == blank_category_id:
                 response = await PurchaseCategorize.categorizing_api(telegram_user_id, category_id,
