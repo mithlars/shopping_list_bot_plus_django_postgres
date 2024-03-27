@@ -89,9 +89,8 @@ class CategoryAddHandler:
     @category_add_router.message(StatesNewCategory.name)
     async def add_name_for_new_category_handler(message: Message, state: FSMContext):
         telegram_user_id = message.chat.id
-        # options = await get_profiles_options_api(telegram_user_id)
-        # lang = options["telegram_language"]
-        lang = 'en'
+        options = await get_profiles_options_api(telegram_user_id)
+        lang = options["telegram_language"]
         cancel_button = emoji['add'] + emoji['categories'] + transl[lang]['buttons']['cancel']
         no_descr_button = transl[lang]['buttons']['no_descr']
         kb = [[KeyboardButton(text=no_descr_button), KeyboardButton(text=cancel_button)]]
