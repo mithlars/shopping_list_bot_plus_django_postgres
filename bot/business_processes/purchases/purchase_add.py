@@ -62,14 +62,14 @@ class PurchasesGetAndCategorize:
     async def categorize_keyboard_builder(status: str, telegram_user_id: int = None, categories: list = None
                                           ) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        if categories is not None:
+        if categories is None:
             categories = await PurchasesGetAndCategorize.gat_categories_api(telegram_user_id)
         for category in categories:
             callback_data = f"categorize;{category['id']};{status}"
             builder.add(InlineKeyboardButton(text=category['name'], callback_data=callback_data))
         builder.add(InlineKeyboardButton(text=emoji['delete'] + _("Cancel"),
                                          callback_data=emoji['add'] + emoji['list'] + _("Cancel")))
-        if status == 'same':
+        if status == 'same':  # TODO: Перевести:
             builder.add(InlineKeyboardButton(text="Разные", callback_data="categorize;dif;dif"))
         else:
             builder.add(InlineKeyboardButton(text="Потом", callback_data="categorize;dif;later"))
