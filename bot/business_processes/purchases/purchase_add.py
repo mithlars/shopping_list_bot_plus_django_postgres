@@ -59,9 +59,10 @@ class PurchasesGetAndCategorize:
         return response.json()
 
     @staticmethod
-    async def categorize_keyboard_builder(status: str, categories: list) -> InlineKeyboardMarkup:
+    async def categorize_keyboard_builder(status: str, telegram_user_id: int = None, categories: list = None) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-
+        if not categories:
+            categories = await PurchasesGetAndCategorize.gat_categories_api(telegram_user_id)
         for category in categories:
             callback_data = f"categorize;{category['id']};{status}"
             builder.add(InlineKeyboardButton(text=category['name'], callback_data=callback_data))
@@ -193,7 +194,7 @@ class Categorize:
 
             text = _("Choose category for new list position\n{purchase_name}:"
                      ).format(purchase_name=non_categorized_purchases_list[-1]['name'])
-            categorize_keyboard = await PurchasesGetAndCategorize.categorize_keyboard_builder(telegram_user_id, status)
+            categorize_keyboard = await PurchasesGetAndCategorize.categorize_keyboard_builder(status, telegram_user_id)
             # Next step of categorizing:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=categorize_keyboard)
 
@@ -224,7 +225,7 @@ class Categorize:
                 else:
                     text += '\n'
             categorize_keyboard = \
-                await PurchasesGetAndCategorize.categorize_keyboard_builder(telegram_user_id, status)
+                await PurchasesGetAndCategorize.categorize_keyboard_builder(status, telegram_user_id)
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=categorize_keyboard)
         else:
             for i in range(len(non_categorized_purchases_list)):
