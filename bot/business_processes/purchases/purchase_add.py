@@ -59,10 +59,9 @@ class PurchasesGetAndCategorize:
         return response.json()
 
     @staticmethod
-    async def categorize_keyboard_builder(telegram_user_id: int, status: str) -> InlineKeyboardMarkup:
+    async def categorize_keyboard_builder(status: str, categories: list) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
 
-        categories = await PurchasesGetAndCategorize.gat_categories_api(telegram_user_id)
         for category in categories:
             callback_data = f"categorize;{category['id']};{status}"
             builder.add(InlineKeyboardButton(text=category['name'], callback_data=callback_data))
@@ -82,21 +81,26 @@ class PurchasesGetAndCategorize:
     async def purchases_add_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         # Starting state, adding to state.data message text, parsed to positions data:
-        await state.set_state(StatesAddPurchases.categorize)
         non_categorized_purchases_list = await PurchasesGetAndCategorize.parsing_purchases_details(message.text)
-        await state.update_data(data={
-            "non_categorized_purchases_list": non_categorized_purchases_list,
-            "categorized_purchases_list": []
-        })
-        # Getting the keyboard to select category:
-        categorize_keyboard = await PurchasesGetAndCategorize.categorize_keyboard_builder(
-            telegram_user_id=telegram_user_id,
-            status="same"
-        )
-        # Sending message with category selecting keyboard:
-        text = "Выберите категорию"
-        await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=ReplyKeyboardRemove())
-        await MyBot.bot.send_message(chat_id=telegram_user_id, text="из списка:", reply_markup=categorize_keyboard)
+        categories = await PurchasesGetAndCategorize.gat_categories_api(telegram_user_id)
+        if len(categories) > 1:
+            await state.set_state(StatesAddPurchases.categorize)
+
+            await state.update_data(data={
+                "non_categorized_purchases_list": non_categorized_purchases_list,
+                "categorized_purchases_list": []
+            })
+            # Getting the keyboard to select category:
+            categorize_keyboard = await PurchasesGetAndCategorize.categorize_keyboard_builder(
+                status="same",
+                categories=categories
+            )
+            # Sending message with category selecting keyboard:
+            text = "Выберите категорию"
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=ReplyKeyboardRemove())
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text="из списка:", reply_markup=categorize_keyboard)
+        else:
+            await Categorize.same_category_for_all(categories[0]['id'], non_categorized_purchases_list, telegram_user_id)
 
     @staticmethod
     @purchases_add_router.callback_query(
@@ -121,8 +125,8 @@ class PurchasesGetAndCategorize:
             await Categorize.same_category_for_all(
                 category_id,
                 non_categorized_purchases_list,
-                state,
-                telegram_user_id
+                telegram_user_id,
+                state
             )
 
         # Different categories and NOT all purchases are selected category:
@@ -259,15 +263,16 @@ class Categorize:
     async def same_category_for_all(
             category_id: int,
             non_categorized_purchases_list: list,
-            state: FSMContext,
-            telegram_user_id: int
+            telegram_user_id: int,
+            state: FSMContext = None
     ):
         category_id = int(category_id)
         # Categorize all:
         for i in range(len(non_categorized_purchases_list)):
             non_categorized_purchases_list[i]['category_id'] = category_id
         # Add new purchases and read all list:
-        await state.clear()
+        if state:
+            await state.clear()
         await PurchaseAdd.add_purchases(non_categorized_purchases_list, telegram_user_id)
 
 
