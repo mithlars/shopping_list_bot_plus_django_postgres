@@ -6,6 +6,8 @@ from typing_extensions import Optional
 
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
 
+i18n = I18n(path="locales", default_locale="en", domain="messages")
+
 
 class LanguageMiddleware(I18nMiddleware):
 

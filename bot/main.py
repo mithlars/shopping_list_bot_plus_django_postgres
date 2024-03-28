@@ -26,7 +26,7 @@ from bot.business_processes.purchases.purchase_categorize_one import purchase_ca
 from bot.business_processes.purchases.purchase_uncategorize_one import purchase_uncategorize_one_router
 from bot.business_processes.purchases.purchase_update import purchase_update_router
 from bot.business_processes.user.manage_friends import manage_friends_router
-from bot.middlewares import LanguageMiddleware
+from bot.middlewares import LanguageMiddleware, i18n
 from constants import admin_telegram_id, startup_admin_message
 from bot.api.django_auth import django_auth
 from create_bot import MyBot
@@ -54,10 +54,8 @@ async def main():
     # Register startup hook to initialize webhook
     MyBot.dp.startup.register(on_startup)
 
-    i18n = I18n(path="locales", default_locale="en", domain="messages")
     my_i18n_middleware = LanguageMiddleware(i18n)
     MyBot.dp.update.middleware.register(my_i18n_middleware)
-
     # Register routers:
     MyBot.dp.include_routers(
         start_router,

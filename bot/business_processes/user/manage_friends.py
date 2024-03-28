@@ -16,6 +16,7 @@ from ..lists.lists_share_and_menu import ListsShareStart
 from ..lists.utils.share_menu_keyboard import share_menu_keyboard_buttons
 from ...constants import django_address, buttons_styles
 from ...emoji import emoji
+from ...middlewares import i18n
 from ...translate import transl
 
 from aiogram.utils.i18n import gettext as _
@@ -116,8 +117,11 @@ class AddFriendByCommand:
         response = await django_auth.session.put(url=url, data=data)
         return response
 
-    @staticmethod  # TODO: Переделать так, чтобы язык брался из сообщения
-    @manage_friends_router.message(F.text.split(':')[0] == __("Add user to my surrounding"))
+    @staticmethod
+    @manage_friends_router.message(
+        lambda message:
+        any(message.text.split(':')[0] == __('Add user to my surrounding', locale=lang) for lang in i18n.locales.keys())
+    )
     async def add_user_to_friends_handler(message: Message):
         telegram_user_id = message.from_user.id
         friend_id = message.text.split(':')[2]
