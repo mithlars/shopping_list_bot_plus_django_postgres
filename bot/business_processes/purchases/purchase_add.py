@@ -69,7 +69,7 @@ class PurchasesGetAndCategorize:
             builder.add(InlineKeyboardButton(text=category['name'], callback_data=callback_data))
         builder.add(InlineKeyboardButton(text=emoji['delete'] + _("Cancel"),
                                          callback_data=emoji['add'] + emoji['list'] + _("Cancel")))
-        if status == 'same':  # TODO: Перевести:
+        if status == 'same':
             builder.add(InlineKeyboardButton(text=_("Different"), callback_data="categorize;dif;dif"))
         else:
             builder.add(InlineKeyboardButton(text=_("Later"), callback_data="categorize;dif;later"))
