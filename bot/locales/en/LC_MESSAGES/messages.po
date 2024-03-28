@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-28 12:52+0400\n"
+"POT-Creation-Date: 2024-03-28 13:05+0400\n"
 "PO-Revision-Date: 2024-03-17 21:04+0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -303,6 +303,26 @@ msgstr ""
 
 #: bot/business_processes/options/options_read_and_menu.py:33
 msgid "Choose language"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_add.py:73
+msgid "Different"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_add.py:75
+msgid "Later"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_add.py:77
+msgid "Remaining"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_add.py:101
+msgid "Choose category"
+msgstr ""
+
+#: bot/business_processes/purchases/purchase_add.py:103
+msgid "from the list:"
 msgstr ""
 
 #: bot/business_processes/purchases/purchase_add.py:113

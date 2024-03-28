@@ -70,11 +70,11 @@ class PurchasesGetAndCategorize:
         builder.add(InlineKeyboardButton(text=emoji['delete'] + _("Cancel"),
                                          callback_data=emoji['add'] + emoji['list'] + _("Cancel")))
         if status == 'same':  # TODO: Перевести:
-            builder.add(InlineKeyboardButton(text="Разные", callback_data="categorize;dif;dif"))
+            builder.add(InlineKeyboardButton(text=_("Different"), callback_data="categorize;dif;dif"))
         else:
-            builder.add(InlineKeyboardButton(text="Потом", callback_data="categorize;dif;later"))
+            builder.add(InlineKeyboardButton(text=_("Later"), callback_data="categorize;dif;later"))
             if status != "remaining":
-                builder.add(InlineKeyboardButton(text="Остальные", callback_data="categorize;dif;remaining"))
+                builder.add(InlineKeyboardButton(text=_("Remaining"), callback_data="categorize;dif;remaining"))
         builder.adjust(3)
         return builder.as_markup(resize_keyboard=True)
 
@@ -98,9 +98,9 @@ class PurchasesGetAndCategorize:
                 categories=categories
             )
             # Sending message with category selecting keyboard:
-            text = "Выберите категорию"
+            text = _("Choose category")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=ReplyKeyboardRemove())
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text="из списка:", reply_markup=categorize_keyboard)
+            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("from the list:"), reply_markup=categorize_keyboard)
         else:
             await Categorize.same_category_for_all(categories[0]['id'], non_categorized_purchases_list, telegram_user_id)
 
