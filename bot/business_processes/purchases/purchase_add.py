@@ -100,9 +100,13 @@ class PurchasesGetAndCategorize:
             # Sending message with category selecting keyboard:
             text = _("Choose category")
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=ReplyKeyboardRemove())
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text=_("from the list:"), reply_markup=categorize_keyboard)
+            await MyBot.bot.send_message(chat_id=telegram_user_id,
+                                         text=_("from the list:"),
+                                         reply_markup=categorize_keyboard)
         else:
-            await Categorize.same_category_for_all(categories[0]['id'], non_categorized_purchases_list, telegram_user_id)
+            await Categorize.same_category_for_all(categories[0]['id'],
+                                                   non_categorized_purchases_list,
+                                                   telegram_user_id)
 
     @staticmethod
     @purchases_add_router.callback_query(
