@@ -14,6 +14,7 @@ from bot.business_processes.groups.group_delete import group_delete_router
 from bot.business_processes.groups.group_line_up import group_lineup_router
 from bot.business_processes.groups.group_edit import group_edit_router
 from bot.business_processes.groups.group_update import group_update_router
+from bot.business_processes.help.main_help import help_router
 from bot.business_processes.lists.list_change_current import list_change_current_router
 from bot.business_processes.lists.list_create import list_create_router
 from bot.business_processes.lists.list_delete import list_delete_router
@@ -59,6 +60,7 @@ async def main():
     # Register routers:
     MyBot.dp.include_routers(
         start_router,
+        help_router,
         main_menu_router,
         manage_friends_router,
         options_router,
