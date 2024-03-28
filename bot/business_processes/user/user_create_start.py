@@ -10,6 +10,8 @@ from bot.constants import start_welcome_message, django_address
 
 from bot.api.django_auth import django_auth, update_last_request_time
 
+from aiogram.utils.i18n import gettext as _
+
 
 class RegisterAPI:
 
@@ -41,7 +43,7 @@ class Start:
     @start_router.message(CommandStart())
     async def create_new_user(message: Message):
         telegram_user_id = message.from_user.id
-        await RegisterAPI.register_new_user(message.from_user)
-        await ListCreateAPI.create_new_list(telegram_user_id, "Первый список", "")
+        await RegisterAPI.register_new_user(message.from_user)  # TODO: Перевести:
+        await ListCreateAPI.create_new_list(telegram_user_id, _("First list"), "")
         keyboard = await list_menu_keyboard_builder(telegram_user_id)
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=start_welcome_message, reply_markup=keyboard)

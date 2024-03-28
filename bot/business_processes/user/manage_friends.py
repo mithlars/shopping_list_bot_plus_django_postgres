@@ -41,7 +41,7 @@ class FriendsList:
             builder.add(InlineKeyboardButton(text=f"{number}", callback_data=f"delete_friend {friend_id}"))
 
             number += 1
-        builder.add(InlineKeyboardButton(text="Добавить", callback_data=f"add_friend"))
+        builder.add(InlineKeyboardButton(text=_("Add"), callback_data=f"add_friend"))
         builder.adjust(6, -1)
         keyboard = builder.as_markup(resize_keyboard=True)
         if message_text == _("Your surrounding:\n"):

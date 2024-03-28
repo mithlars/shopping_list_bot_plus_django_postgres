@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-21 15:10+0400\n"
+"POT-Creation-Date: 2024-03-28 12:52+0400\n"
 "PO-Revision-Date: 2024-03-17 21:04+0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -28,9 +28,9 @@ msgstr ""
 #: bot/business_processes/lists/list_update.py:95
 #: bot/business_processes/lists/list_update.py:112
 #: bot/business_processes/lists/list_update.py:124
-#: bot/business_processes/purchases/purchase_add.py:69
 #: bot/business_processes/purchases/purchase_add.py:70
-#: bot/business_processes/purchases/purchase_add.py:103
+#: bot/business_processes/purchases/purchase_add.py:71
+#: bot/business_processes/purchases/purchase_add.py:109
 #: bot/business_processes/purchases/purchase_categorize_one.py:44
 #: bot/business_processes/purchases/purchase_categorize_one.py:123
 #: bot/business_processes/purchases/purchase_categorize_one.py:160
@@ -39,9 +39,9 @@ msgstr ""
 #: bot/business_processes/purchases/purchase_update.py:104
 #: bot/business_processes/purchases/purchase_update.py:131
 #: bot/business_processes/purchases/purchase_update.py:142
-#: bot/business_processes/user/manage_friends.py:148
-#: bot/business_processes/user/manage_friends.py:161
-#: bot/business_processes/user/manage_friends.py:191
+#: bot/business_processes/user/manage_friends.py:152
+#: bot/business_processes/user/manage_friends.py:165
+#: bot/business_processes/user/manage_friends.py:195
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -85,15 +85,15 @@ msgstr ""
 #: bot/business_processes/lists/list_create.py:86
 #: bot/business_processes/lists/list_delete.py:252
 #: bot/business_processes/lists/lists_share_and_menu.py:153
-#: bot/business_processes/purchases/purchase_categorize_one.py:209
-#: bot/business_processes/purchases/purchase_categorize_one.py:231
-#: bot/business_processes/purchases/purchase_categorize_one.py:237
+#: bot/business_processes/purchases/purchase_categorize_one.py:208
+#: bot/business_processes/purchases/purchase_categorize_one.py:230
+#: bot/business_processes/purchases/purchase_categorize_one.py:236
 #: bot/business_processes/purchases/purchase_uncategorize_one.py:139
 #: bot/business_processes/purchases/purchase_update.py:191
-#: bot/business_processes/user/manage_friends.py:96
-#: bot/business_processes/user/manage_friends.py:126
-#: bot/business_processes/user/manage_friends.py:181
-#: bot/business_processes/user/manage_friends.py:210
+#: bot/business_processes/user/manage_friends.py:97
+#: bot/business_processes/user/manage_friends.py:130
+#: bot/business_processes/user/manage_friends.py:185
+#: bot/business_processes/user/manage_friends.py:214
 msgid "Somthing went rong"
 msgstr "Что-то пошло не так"
 
@@ -328,11 +328,11 @@ msgstr ""
 msgid "Choose language"
 msgstr "Выберите язык:"
 
-#: bot/business_processes/purchases/purchase_add.py:107
+#: bot/business_processes/purchases/purchase_add.py:113
 msgid "OK, inputted data is deleted"
 msgstr "Хорошо, введенные данные удалены."
 
-#: bot/business_processes/purchases/purchase_add.py:190
+#: bot/business_processes/purchases/purchase_add.py:196
 msgid ""
 "Choose category for new list position\n"
 "{purchase_name}:"
@@ -340,19 +340,19 @@ msgstr ""
 "Выберите категорию для новой позиции списка\n"
 "{purchase_name}:"
 
-#: bot/business_processes/purchases/purchase_add.py:214
+#: bot/business_processes/purchases/purchase_add.py:220
 msgid "Choose category for other new list positions "
 msgstr "Выберите категорию для остальных новых позиций списка:\n"
 
-#: bot/business_processes/purchases/purchase_add.py:289
+#: bot/business_processes/purchases/purchase_add.py:296
 msgid "All of this positions are already in the list\n"
 msgstr "Все эти позиции уже есть в списке:\n"
 
-#: bot/business_processes/purchases/purchase_add.py:291
+#: bot/business_processes/purchases/purchase_add.py:298
 msgid "Positions which added to the list:\n"
 msgstr "Позиции добавленные в список:\n"
 
-#: bot/business_processes/purchases/purchase_add.py:306
+#: bot/business_processes/purchases/purchase_add.py:313
 msgid ""
 "\n"
 "The following positions are already in the list\n"
@@ -379,7 +379,7 @@ msgstr "Удалить"
 msgid "Keep"
 msgstr "Оставить"
 
-#: bot/business_processes/purchases/purchase_categorize_one.py:213
+#: bot/business_processes/purchases/purchase_categorize_one.py:212
 msgid "Remove this item from the previous category?"
 msgstr "Удалить позицию из предыдущей категории?"
 
@@ -413,16 +413,20 @@ msgstr "Введите новое имя для позиции списка"
 msgid "Your chose is leave the list position without changes"
 msgstr "Вы решили оставить данные позиции списка без изменений."
 
-#: bot/business_processes/user/manage_friends.py:32
-#: bot/business_processes/user/manage_friends.py:46
+#: bot/business_processes/user/manage_friends.py:33
+#: bot/business_processes/user/manage_friends.py:47
 msgid "Your surrounding:\n"
 msgstr "Ваше окружение:\n"
 
-#: bot/business_processes/user/manage_friends.py:47
+#: bot/business_processes/user/manage_friends.py:44
+msgid "Add"
+msgstr "Добавить"
+
+#: bot/business_processes/user/manage_friends.py:48
 msgid "Your surrounding is empty."
 msgstr "В вашем окружении никого нет."
 
-#: bot/business_processes/user/manage_friends.py:49
+#: bot/business_processes/user/manage_friends.py:50
 msgid ""
 "\n"
 "Hint:\n"
@@ -432,31 +436,31 @@ msgstr ""
 "Подсказка:\n"
 "Нажмите номер пользователя для удаления его из окружения:"
 
-#: bot/business_processes/user/manage_friends.py:120
+#: bot/business_processes/user/manage_friends.py:123
 msgid "Add user to my surrounding"
 msgstr "Добавить в мое окружение пользователя"
 
-#: bot/business_processes/user/manage_friends.py:141
+#: bot/business_processes/user/manage_friends.py:145
 msgid "username"
 msgstr "username"
 
-#: bot/business_processes/user/manage_friends.py:142
+#: bot/business_processes/user/manage_friends.py:146
 msgid "telegram_id"
 msgstr "telegram_id"
 
-#: bot/business_processes/user/manage_friends.py:144
+#: bot/business_processes/user/manage_friends.py:148
 msgid "What user data do you have?"
 msgstr "Какие данные о пользователе у Вас есть?"
 
-#: bot/business_processes/user/manage_friends.py:166
+#: bot/business_processes/user/manage_friends.py:170
 msgid "Send user username:"
 msgstr "Пришлите username пользователя:"
 
-#: bot/business_processes/user/manage_friends.py:196
+#: bot/business_processes/user/manage_friends.py:200
 msgid "Send user telegram_id:"
 msgstr "Пришлите идентификатор (id) пользователя telegram:"
 
-#: bot/business_processes/user/manage_friends.py:227
+#: bot/business_processes/user/manage_friends.py:231
 msgid ""
 "Send the message-command below to another user and ask him/her to send it"
 " to the chat with the bot so that the user can give you access to his/her"
@@ -468,7 +472,7 @@ msgstr ""
 "своим спискам.\n"
 "Необходимо, чтобы у обоих был настроен один о тот же язык."
 
-#: bot/business_processes/user/manage_friends.py:233
+#: bot/business_processes/user/manage_friends.py:237
 msgid ""
 "Add user to my surrounding: {telegram_user_firstname} "
 "{telegram_user_lastname} with id:{telegram_user_id}"
@@ -476,4 +480,8 @@ msgstr ""
 "\n"
 "Добавить в мое окружение пользователя: {telegram_user_firstname} "
 "{telegram_user_lastname} с id:{telegram_user_id}"
+
+#: bot/business_processes/user/user_create_start.py:47
+msgid "First list"
+msgstr "Первый список"
 
