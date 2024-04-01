@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from requests import Response
@@ -9,7 +9,6 @@ from bot.business_processes.categories.utils.categories_menu_keyboard import cat
 from bot.business_processes.options.utils.get_profiles_options_api import get_profiles_options_api
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
-from bot.emoji import emoji
 from bot.translate import transl
 
 categories_sort_router = Router()
