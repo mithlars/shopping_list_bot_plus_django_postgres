@@ -896,8 +896,9 @@ class RegisterNewTelegramBotUserView(View):
         except UserProfile.DoesNotExist:
             data = request.POST
             # TODO: Исправить на сохранение через сериализатор:
+            print(f"{data.get('telegram_user_name') = }")
             UserProfile.objects.create(
-                name=data.get("telegram_user_name"),
+                name=data.get("telegram_user_name", data.get('telegram_user_id')),
                 telegram_user_id=int(data.get('telegram_user_id')),
                 telegram_username=data.get('telegram_user_name'),
                 telegram_firstname=data.get('first_name'),
