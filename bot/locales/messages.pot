@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-28 13:05+0400\n"
+"POT-Creation-Date: 2024-04-04 13:40+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: bot/business_processes/lists/list_update.py:124
 #: bot/business_processes/purchases/purchase_add.py:70
 #: bot/business_processes/purchases/purchase_add.py:71
-#: bot/business_processes/purchases/purchase_add.py:109
+#: bot/business_processes/purchases/purchase_add.py:113
 #: bot/business_processes/purchases/purchase_categorize_one.py:44
 #: bot/business_processes/purchases/purchase_categorize_one.py:123
 #: bot/business_processes/purchases/purchase_categorize_one.py:160
@@ -316,33 +316,33 @@ msgstr ""
 msgid "Choose category"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:103
+#: bot/business_processes/purchases/purchase_add.py:104
 msgid "from the list:"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:113
+#: bot/business_processes/purchases/purchase_add.py:117
 msgid "OK, inputted data is deleted"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:196
+#: bot/business_processes/purchases/purchase_add.py:200
 msgid ""
 "Choose category for new list position\n"
 "{purchase_name}:"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:220
+#: bot/business_processes/purchases/purchase_add.py:224
 msgid "Choose category for other new list positions "
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:296
+#: bot/business_processes/purchases/purchase_add.py:300
 msgid "All of this positions are already in the list\n"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:298
+#: bot/business_processes/purchases/purchase_add.py:302
 msgid "Positions which added to the list:\n"
 msgstr ""
 
-#: bot/business_processes/purchases/purchase_add.py:313
+#: bot/business_processes/purchases/purchase_add.py:317
 msgid ""
 "\n"
 "The following positions are already in the list\n"
@@ -458,5 +458,9 @@ msgstr ""
 
 #: bot/business_processes/user/user_create_start.py:47
 msgid "First list"
+msgstr ""
+
+#: bot/business_processes/user/user_create_start.py:49
+msgid "Welcome to the bot"
 msgstr ""
 

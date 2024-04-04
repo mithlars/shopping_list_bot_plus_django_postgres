@@ -9,8 +9,6 @@ admin_telegram_id = 129727111
 
 startup_admin_message = "Бот вышел в онлайн"
 
-start_welcome_message = "Welcome to the bot"
-
 DJANGO_USERNAME = os.getenv("DJANGO_USERNAME")
 DJANGO_USER_PASSWORD = os.getenv("DJANGO_USER_PASSWORD")
 

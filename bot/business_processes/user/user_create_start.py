@@ -6,7 +6,7 @@ from requests import Response
 from bot.business_processes.lists.list_create import ListCreateAPI
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_builder
 from bot.create_bot import MyBot
-from bot.constants import start_welcome_message, django_address
+from bot.constants import django_address
 
 from bot.api.django_auth import django_auth, update_last_request_time
 
@@ -46,4 +46,5 @@ class Start:
         await RegisterAPI.register_new_user(message.from_user)  # TODO: Перевести:
         await ListCreateAPI.create_new_list(telegram_user_id, _("First list"), "")
         keyboard = await list_menu_keyboard_builder(telegram_user_id)
+        start_welcome_message = _("Welcome to the bot")
         await MyBot.bot.send_message(chat_id=telegram_user_id, text=start_welcome_message, reply_markup=keyboard)
