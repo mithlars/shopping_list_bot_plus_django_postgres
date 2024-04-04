@@ -77,7 +77,7 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=150, blank=True)
     published = models.DateTimeField(auto_now_add=True)
 
-    telegram_user_id = models.IntegerField(null=True, blank=True)
+    telegram_user_id = models.BigIntegerField(null=True, blank=True)
     telegram_username = models.CharField(max_length=270, null=True, blank=True)
     telegram_firstname = models.CharField(max_length=270, null=True, blank=True)
     telegram_lastname = models.CharField(max_length=270, null=True, blank=True)
