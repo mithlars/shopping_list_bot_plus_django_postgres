@@ -1,7 +1,6 @@
 #!/bin/bash
 export DB_CONNECTOR=postgres_container_config
-python manage.py makemigrations list
-python manage.py migrate list
+python manage.py makemigrations
 python manage.py migrate
 python manage.py shell << EOF
 from django.contrib.auth import get_user_model
