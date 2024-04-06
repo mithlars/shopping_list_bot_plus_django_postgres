@@ -20,7 +20,8 @@ def list_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'groups':        emoji['groups'],
             'categories':    emoji['categories'],
             'lists':         emoji['lists'],
-            'options':       emoji['options']
+            'options':       emoji['options'],
+            'help':          emoji['help']
         },
         'text': {  # ["reload📋", "edit️📋", "to category", "from category", "Groups", "Categories", "Lists", "Options"],
             'reload':        buttons_long['reload'] + emoji['list'],
@@ -30,7 +31,8 @@ def list_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'groups':        buttons_long['groups'],
             'categories':    buttons_long['categories'],
             'lists':         buttons_long['lists'],
-            'options':       buttons_long['options']
+            'options':       buttons_long['options'],
+            'help':          emoji['help']
         },
         'both': {  # ["🔄📋rld", "✏️📋️chg", "➡️📁ToCat", "📁➡️FrCat", "🗃️Gr.", "🗂️Cats", "📦Lists", "🛠️Opt."]
             'reload':        emoji['reload'] + emoji['list'] + buttons_short['reload'],
@@ -40,7 +42,8 @@ def list_menu_keyboard_buttons(lang: str) -> Dict[str, Dict]:
             'groups':        emoji['groups'] + buttons_short['groups'],
             'categories':    emoji['categories'] + buttons_short['categories'],
             'lists':         emoji['lists'] + buttons_short['lists'],
-            'options':       emoji['options'] + buttons_short['options']
+            'options':       emoji['options'] + buttons_short['options'],
+            'help':          emoji['help']
         },
     }
     return buttons
@@ -54,5 +57,5 @@ async def list_menu_keyboard_builder(telegram_user_id: int) -> ReplyKeyboardMark
     style = options["telegram_buttons_style"]
     for button_text in buttons[style].values():
         builder.add(KeyboardButton(text=button_text))
-    builder.adjust(4)
+    builder.adjust(4, 5)
     return builder.as_markup(resize_keyboard=True)
