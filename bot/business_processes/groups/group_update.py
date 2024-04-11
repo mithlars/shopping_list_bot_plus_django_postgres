@@ -89,7 +89,7 @@ class GroupUpdateFMS:
         if description:
             builder.add(KeyboardButton(text=_("Without description")))
 
-        builder.add(KeyboardButton(text=emoji['edit'] + emoji['categories'] + _("Cancel")))
+        builder.add(KeyboardButton(text=emoji['edit'] + emoji['groups'] + _("Cancel")))
 
         return builder.as_markup(resize_keyboard=True)
 
@@ -116,7 +116,7 @@ class GroupUpdateFMS:
                                      parse_mode='MarkdownV2')
 
     @staticmethod
-    @group_update_router.message(F.text.replace(f"{emoji['edit']}{emoji['categories']}", "") == __('Cancel'))
+    @group_update_router.message(F.text.replace(f"{emoji['edit']}{emoji['groups']}", "") == __('Cancel'))
     async def state_cancel_handler(message: Message, state: FSMContext):
         telegram_user_id = message.from_user.id
         await state.clear()
