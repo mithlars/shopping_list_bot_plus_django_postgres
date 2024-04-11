@@ -156,7 +156,7 @@ class UpdateCategoryFMS:
         data = await state.get_data()
         lang = data['lang']
         update_tr = transl[lang]['categories']['update']
-        if message.text == any(transl[language]['buttons']['no_chngs'] for language in transl.keys()):
+        if any(message.text == transl[language]['buttons']['no_chngs'] for language in transl.keys()):
             await state.update_data(name=data["category_ald_name"])
         else:
             await state.update_data(name=message.text)
@@ -183,9 +183,9 @@ class UpdateCategoryFMS:
         update_tr = transl[lang]['categories']['update']
         errors = transl[lang]['errors']
         category_data = await state.get_data()
-        if message.text == any(transl[any_lang]['buttons']['no_chngs'] for any_lang in transl.keys()):
+        if any(message.text == transl[any_lang]['buttons']['no_chngs'] for any_lang in transl.keys()):
             category_data["description"] = category_data["category_ald_description"]
-        elif message.text == any(transl[any_lang]['buttons']['no_descr'] for any_lang in transl.keys()):
+        elif any(message.text == transl[any_lang]['buttons']['no_descr'] for any_lang in transl.keys()):
             category_data["description"] = ""
         else:
             category_data["description"] = message.text

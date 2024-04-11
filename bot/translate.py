@@ -40,11 +40,11 @@ transl = {
                 },
                 'buttons': {
                     'cancel': 'Отмена',
-                    'no_chngs': "Без изменений",
+                    'no_chngs': 'Без изменений',
                     'no_descr': 'Без описания'
                 },
                 'errors': {
-                    'smt_rong': "Что-то пошло не так"
+                    'smt_rong': 'Что-то пошло не так'
                 },
                 'vocabulary': {
                     'category': 'Категория',
