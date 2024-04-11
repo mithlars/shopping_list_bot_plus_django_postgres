@@ -29,7 +29,7 @@ class GroupLineUpStart:
                 message_text += "\n"
 
             builder.add(InlineKeyboardButton(text=f"{number}",
-                                             callback_data=f"group_lineup {group_dict['id']} {group_dict['name']}"))
+                                             callback_data=f"group_lineup;:{group_dict['id']};:{group_dict['name']}"))
             number += 1
         builder.adjust(6)
         keyboard = builder.as_markup(resize_keyboard=True)
@@ -102,10 +102,11 @@ class GroupLineUpCategories:
         return keyboard
 
     @staticmethod
-    @group_lineup_router.callback_query(lambda c: c.data and c.data.startswith("group_lineup "))
+    @group_lineup_router.callback_query(lambda c: c.data and c.data.startswith("group_lineup;:"))
     async def categories_read_for_group_handler(callback: CallbackQuery):
         telegram_user_id = callback.from_user.id
-        group_id, group_name = callback.data.split(' ')[1:]
+        print(f"{callback.data = }")
+        group_id, group_name = callback.data.split(';:')[1:]
         groups_categories = await GroupLineUpCategories.get_groups_categories_list_api(telegram_user_id, group_id)
         keyboard = \
             await GroupLineUpCategories.categories_read_for_group_api(telegram_user_id, group_id, groups_categories)
