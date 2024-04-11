@@ -109,5 +109,4 @@ class GroupChangeCurrent:
         response_status = await GroupChangeCurrent.change_current_api(telegram_user_id, new_current_group_id)
         if response_status != 200:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=_('Somthing went rong'))
-        # await GroupChangeCurrentStart.change_current_group(telegram_user_id)
         await ListRead.get_current_lists_purchases_list(telegram_user_id)
