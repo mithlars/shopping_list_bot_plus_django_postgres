@@ -22,8 +22,6 @@ class ListChangeCurrentDataProcessing:
         number = 1
         builder = InlineKeyboardBuilder()
         current_list_data = list_of_lists.pop()
-        print(f"{current_list_data = }")
-        print(f"{list_of_lists = }")
         for list_dict in list_of_lists:
             list_dict_fields = list_dict['fields']
             if list_dict['pk'] == current_list_data['id']:
