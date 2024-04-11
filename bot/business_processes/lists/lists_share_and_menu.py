@@ -91,6 +91,8 @@ class ListShareChooseList:
             friend_id = friend['pk']
             friend_firstname = friend['fields']['telegram_firstname']
             friend_lastname = friend['fields']['telegram_lastname']
+            if friend_lastname is None:
+                friend_lastname = ''
             text = f"{friend_firstname} {friend_lastname}"
             if int(list_id) in friend['fields']['lists']:
                 text = f"✅  {text}"

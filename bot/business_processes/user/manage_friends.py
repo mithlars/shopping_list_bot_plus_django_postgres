@@ -36,7 +36,9 @@ class FriendsList:
             friend_id = friend['pk']
             friend_firstname = friend['fields']['telegram_firstname']
             friend_lastname = friend['fields']['telegram_lastname']
-
+            if friend_lastname is None:
+                friend_lastname = ''
+            print(f"{friend_lastname = }")
             message_text += f"{number}. {friend_firstname} {friend_lastname}\n"
             builder.add(InlineKeyboardButton(text=f"{number}", callback_data=f"delete_friend {friend_id}"))
 
