@@ -8,6 +8,7 @@ from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.groups.utils.groups_menu_keyboard import groups_menu_keyboard_builder, \
     groups_menu_keyboard_buttons
 from bot.business_processes.lists.utils.lits_details_api import get_lists_detail_api
+from bot.business_processes.purchases.purchase_delete_and_list_menu import ListRead
 from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_buttons
 from bot.constants import django_address, buttons_styles
 from bot.create_bot import MyBot
@@ -108,4 +109,5 @@ class GroupChangeCurrent:
         response_status = await GroupChangeCurrent.change_current_api(telegram_user_id, new_current_group_id)
         if response_status != 200:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=_('Somthing went rong'))
-        await GroupChangeCurrentStart.change_current_group(telegram_user_id)
+        # await GroupChangeCurrentStart.change_current_group(telegram_user_id)
+        await ListRead.get_current_lists_purchases_list(telegram_user_id)
