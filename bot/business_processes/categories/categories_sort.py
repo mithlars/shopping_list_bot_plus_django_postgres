@@ -117,7 +117,7 @@ class CategoriesSortMove:
             await MyBot.bot.send_message(chat_id=telegram_user_id, text=trouble_message)
             await UpdateCategoryStart.categories_read_for_update(telegram_user_id)
         else:
-            sort_keyboard = await CategoriesSortStart.categories_sort_api(telegram_user_id)
+            sort_keyboard = await CategoriesSortStart.categories_sort_api(telegram_user_id, lang)
             await MyBot.bot.edit_message_reply_markup(chat_id=telegram_user_id,
                                                       message_id=message_id,
                                                       reply_markup=sort_keyboard)
