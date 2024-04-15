@@ -22,7 +22,7 @@ services:
     networks:
       - shopping_list_net_t
     ports:
-      - '5432:5432'
+      - '5433:5432'
   django_t:
     container_name: django_t
     build:
@@ -45,7 +45,7 @@ services:
       shopping_list_net_t:
         ipv4_address: 172.19.2.3
     ports:
-      - "8000:8000"
+      - "8088:8000"
     depends_on:
       - db_t
 
@@ -59,7 +59,7 @@ services:
       - API_TOKEN
       - DJANGO_USERNAME
       - DJANGO_USER_PASSWORD
-      - DJANGO_ADDRESS=http://172.19.2.3:8000
+      - DJANGO_ADDRESS=http://172.19.2.3:8088
       - PYTHONPATH=/
     depends_on:
       - django_t

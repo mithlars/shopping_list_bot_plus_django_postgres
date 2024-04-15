@@ -88,7 +88,7 @@ postgres_container_config = {
         'NAME': 'list_db',
         'USER': 'postgres',
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': 'db_t',
+        'HOST': 'db',
         'PORT': '5432',
     }
 
@@ -98,7 +98,7 @@ postgres_container_test_config = {
         'USER': 'postgres',
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': 'db_t',
-        'PORT': '5432',
+        'PORT': '5433',
     }
 
 DATABASES = {
