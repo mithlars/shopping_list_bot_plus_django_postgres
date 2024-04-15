@@ -62,7 +62,7 @@ services:
       - DJANGO_ADDRESS=http://django_t:8088
       - PYTHONPATH=/
     depends_on:
-      - django
+      - django_t
     networks:
       shopping_list_net_t:
         ipv4_address: 172.18.2.4
