@@ -18,10 +18,10 @@ export API_TOKEN=$API_TOKEN
 export COMPOSE_PROJECT_NAME=shopping_list_test
 
 echo "Stopping containers:"
-docker stop bot_t django_t
+docker stop bot_t django_t postgres_t
 
 echo "rm containers:"
-docker rm bot_t django_t
+docker rm bot_t django_t postgres_t
 
 echo "removing docker images:"
 docker image rm shopping_list_test_bot_t shopping_list_test_django_t:latest
