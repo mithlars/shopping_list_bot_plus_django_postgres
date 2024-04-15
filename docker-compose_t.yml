@@ -1,0 +1,75 @@
+version: '3.8'
+services:
+  db_t:
+    container_name: postgres_t
+    image: postgres
+    environment:
+      - POSTGRES_DB=list_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db_t
+      - POSTGRES_PORT=5432
+      - PG_DATA=/var/lib/pgsql/pgdata
+      - pgsql='psql -U postgres -nxq -v ON_ERROR_STOP=on --dbname list_db'
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - shopping_list_net_t
+    ports:
+      - '5432:5432'
+  django_t:
+    container_name: django_t
+    build:
+      context: .
+      dockerfile: ./djDocker/Dockerfile_t
+    command: ./start_t.sh
+    #    command: sh -c "/django/start.sh && python manage.py runserver 0.0.0.0:8000"
+#    command: sh -c 'python manage.py makemigrations && python manage.py migrate && python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); user = User.objects.create_user(username=os.environ.get('DJANGO_USERNAME'), password=os.environ.get('DJANGO_USER_PASSWORD')); os.putenv('TELEGRAM_BOT_USER_ID', user.id)" && while true; do sleep 1000; done'
+#    command: sh -c "while true; do sleep 1000; done"
+#    python manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD
+      - DB_CONNECTOR=postgres_container_config
+      - DJANGO_USERNAME
+      - DJANGO_USER_PASSWORD
+      - TELEGRAM_BOT_IP=172.18.2.4
+      - TELEGRAM_BOT_USER_ID=0
+    networks:
+      shopping_list_net_t:
+        ipv4_address: 172.18.2.3
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_t
+
+  bot_t:
+    container_name: bot_t
+    build: .
+    command: sh -c "python ./main.py"
+#    command: sh -c "while true; do sleep 1000; done"
+    restart: always
+    environment:
+      - API_TOKEN
+      - DJANGO_USERNAME
+      - DJANGO_USER_PASSWORD
+      - DJANGO_ADDRESS=http://django_t:8088
+      - PYTHONPATH=/
+    depends_on:
+      - django
+    networks:
+      shopping_list_net_t:
+        ipv4_address: 172.18.2.4
+
+volumes:
+  pgdata:
+
+networks:
+  shopping_list_net_t:
+    external: True
