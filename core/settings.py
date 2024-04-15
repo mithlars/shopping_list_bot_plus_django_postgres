@@ -92,6 +92,15 @@ postgres_container_config = {
         'PORT': '5432',
     }
 
+postgres_container_test_config = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'list_db',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': 'db_t',
+        'PORT': '5432',
+    }
+
 DATABASES = {
     'default': locals()[os.getenv("DB_CONNECTOR")]
 }
