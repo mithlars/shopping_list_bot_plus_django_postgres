@@ -54,6 +54,10 @@ class DjangoAuth:
         # if 'csrftoken' in self.session.cookies:
         #     self.session.headers.update({'X-CSRFToken': self.session.cookies['csrftoken']})
 
+        f = open('logs_main.txt', 'a')
+        f.write(f'cookies:\n{self.session.cookies}')
+        f.close()
+
         # Делаем login-запрос:
         login_data = {
             'username': DJANGO_USERNAME,
