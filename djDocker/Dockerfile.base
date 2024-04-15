@@ -1,0 +1,9 @@
+FROM python:3.11.6
+RUN mkdir /django
+WORKDIR /django
+RUN pip3 install --upgrade pip
+RUN pip3 install django==5.0.3
+RUN pip3 install djangorestframework==3.14.0
+RUN pip3 install pillow==10.2.0
+RUN pip install psycopg2-binary
+RUN chmod 755 .
