@@ -45,6 +45,9 @@ async def main():
     # Авторизация бота в django:
 
     loop = asyncio.get_event_loop()
+    f = open('logs_main.txt', 'w')
+    f.write('___Start:\n\n')
+    f.close()
     try:
         await django_auth.login()
     except Exception as er:

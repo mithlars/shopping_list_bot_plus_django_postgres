@@ -58,11 +58,17 @@ class DjangoAuth:
         }
         response = await self.session.post(self.api_login_url, data=login_data)
         # Если login-запрос удался -- обновляем время последнего запроса:
+        f = open('logs_main.txt', 'a')
         if response.status_code == 200:
             self.last_request_time = asyncio.get_event_loop().time()
+            f.write('Login is OK')
+            f.close()
             print('Login is OK')
             return True
         else:
+            f.write('Login is failed')
+            f.close()
+            print('Login is failed')
             return False
 
     async def refresh_session(self):
