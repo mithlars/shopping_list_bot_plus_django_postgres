@@ -1,4 +1,4 @@
-FROM dot_base:latest
+FROM bot_base:latest
 WORKDIR /bot
 COPY bot/ ./
 COPY __init__.py .
