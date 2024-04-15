@@ -88,7 +88,7 @@ postgres_container_config = {
         'NAME': 'list_db',
         'USER': 'postgres',
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': 'db',
+        'HOST': 'db_t',
         'PORT': '5432',
     }
 
