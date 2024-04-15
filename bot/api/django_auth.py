@@ -59,9 +59,11 @@ class DjangoAuth:
             'password': DJANGO_USER_PASSWORD,
         }
         f.write('starting login request to django:\n')
+        f.close()
         response = await self.session.post(self.api_login_url, data=login_data)
         # Если login-запрос удался -- обновляем время последнего запроса:
 
+        f = open('logs_main.txt', 'a')
         if response.status_code == 200:
             self.last_request_time = asyncio.get_event_loop().time()
             f.write('Login is OK\n')
