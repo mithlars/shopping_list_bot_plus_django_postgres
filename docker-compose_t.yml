@@ -59,7 +59,7 @@ services:
       - API_TOKEN
       - DJANGO_USERNAME
       - DJANGO_USER_PASSWORD
-      - DJANGO_ADDRESS=http://django_t:8088
+      - DJANGO_ADDRESS=http://django_t:8000
       - PYTHONPATH=/
     depends_on:
       - django_t
