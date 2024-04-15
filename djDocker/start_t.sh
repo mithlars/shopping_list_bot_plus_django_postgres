@@ -15,6 +15,6 @@ with open('./core/telegram_bot_user_id.py', 'w') as f:
     f.write("telegram_bot_user_id = " + str(user.id))
 EOF
 #while true; do sleep 1000; done
-python manage.py runserver 0.0.0.0:8088
+python manage.py runserver 0.0.0.0:8000
 
 
