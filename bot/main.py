@@ -46,9 +46,9 @@ async def main():
 
     loop = asyncio.get_event_loop()
     f = open('logs_main.txt', 'w')
-    f.write('___Start:\n\n')
-    f.close()
     try:
+        f.write('___Start:\n\n')
+        f.close()
         await django_auth.login()
     except Exception as er:
         print(f"Авторизация провалилась\n {er}")
