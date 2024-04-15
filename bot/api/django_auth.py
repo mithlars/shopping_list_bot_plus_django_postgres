@@ -46,6 +46,8 @@ class DjangoAuth:
     async def login(self):
         """Method performs authorisation on Django service"""
 
+        f = open('logs_main.txt', 'a')
+
         # Делаем get-запрос для получения csrf-токена:
         self.session.get(self.api_login_url)
         # if 'csrftoken' in self.session.cookies:
@@ -56,17 +58,18 @@ class DjangoAuth:
             'username': DJANGO_USERNAME,
             'password': DJANGO_USER_PASSWORD,
         }
+        f.write('starting login request to django:\n')
         response = await self.session.post(self.api_login_url, data=login_data)
         # Если login-запрос удался -- обновляем время последнего запроса:
-        f = open('logs_main.txt', 'a')
+
         if response.status_code == 200:
             self.last_request_time = asyncio.get_event_loop().time()
-            f.write('Login is OK')
+            f.write('Login is OK\n')
             f.close()
             print('Login is OK')
             return True
         else:
-            f.write('Login is failed')
+            f.write('Login is failed\n')
             f.close()
             print('Login is failed')
             return False
