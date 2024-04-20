@@ -30,7 +30,7 @@ echo "removing docker-network named shopping_list_net_t:"
 docker network rm shopping_list_net_t
 
 echo "creating docker-network named shopping_list_net_t:"
-docker network create --subnet=172.19.0.0/16 shopping_list_net_t
+docker network create --subnet=172.16.0.0/16 shopping_list_net_t
 
 echo "moving to /home/lars50/django_bot_t"
 mkdir -m a=rwx /home/lars50/django_bot_t
