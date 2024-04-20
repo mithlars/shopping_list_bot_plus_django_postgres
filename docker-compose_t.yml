@@ -39,11 +39,11 @@ services:
       - DB_CONNECTOR=postgres_container_test_config
       - DJANGO_USERNAME
       - DJANGO_USER_PASSWORD
-      - TELEGRAM_BOT_IP=172.17.2.4
+      - TELEGRAM_BOT_IP=172.16.2.4
       - TELEGRAM_BOT_USER_ID=0
     networks:
       shopping_list_net_t:
-        ipv4_address: 172.17.2.3
+        ipv4_address: 172.16.2.3
     ports:
       - "8088:8000"
     depends_on:
@@ -59,13 +59,13 @@ services:
       - API_TOKEN
       - DJANGO_USERNAME
       - DJANGO_USER_PASSWORD
-      - DJANGO_ADDRESS=http://172.17.2.3:8088
+      - DJANGO_ADDRESS=http://172.16.2.3:8088
       - PYTHONPATH=/
     depends_on:
       - django_t
     networks:
       shopping_list_net_t:
-        ipv4_address: 172.17.2.4
+        ipv4_address: 172.16.2.4
 
 volumes:
   pgdata:
