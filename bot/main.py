@@ -46,10 +46,11 @@ async def main():
 
     loop = asyncio.get_event_loop()
     f = open('logs_main.txt', 'w')
+    django_auth.last_request_time = asyncio.get_event_loop().time() - 270
     try:
         f.write('___Start:\n\n')
         f.close()
-        await django_auth.login()
+        # await django_auth.login()
     except Exception as er:
         print(f"Авторизация провалилась\n {er}")
     # loop.run_until_complete(await django_auth.login())  # Авторизуемся при запуске бота

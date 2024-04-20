@@ -101,9 +101,8 @@ class DjangoAuth:
                 url = f"{django_address}/profiles/options/"
                 data = {"telegram_user_id": 123123123}
                 response = self.session.get(url=url, data=data)
-                # response = self.session.get(self.api_login_url)
                 if response.status_code == 401:
-                    response = self.session.get(self.api_login_url)
+                    # response = self.session.get(self.api_login_url)
                     await self.login()
                 elif response.status_code == 200 or response.status_code == 404:
                     self.last_request_time = asyncio.get_event_loop().time()
