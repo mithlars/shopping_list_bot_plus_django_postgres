@@ -40,7 +40,7 @@ echo "removing old version code"
 rm -rf ./*
 
 echo "downloading last version code:"
-git clone https://github.com/mithlars/shopping_list_bot_plus_django_postgres
+git clone -b Fix-login https://github.com/mithlars/shopping_list_bot_plus_django_postgres
 
 echo "moving to the project folder"
 cd shopping_list_bot_plus_django_postgres
