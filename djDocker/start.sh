@@ -1,5 +1,4 @@
 #!/bin/bash
-export DB_CONNECTOR=postgres_container_config
 python manage.py makemigrations
 python manage.py migrate
 python manage.py shell << EOF
