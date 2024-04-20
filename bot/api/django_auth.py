@@ -54,7 +54,7 @@ class DjangoAuth:
         # Делаем get-запрос для получения csrf-токена:
         self.session.get(self.api_login_url)
         f = open('logs_main.txt', 'a')
-        f.write(f'cookies:\n{self.session}')
+        f.write(f'cookies:\n')
         f.close()
         # if 'csrftoken' in self.session.cookies:
         #     self.session.headers.update({'X-CSRFToken': self.session.cookies['csrftoken']})
