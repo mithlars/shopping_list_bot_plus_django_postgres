@@ -2,7 +2,7 @@ import asyncio
 import requests
 from functools import wraps
 from bot.constants import DJANGO_USERNAME, DJANGO_USER_PASSWORD
-from bot.constants import django_login_url
+from bot.constants import django_login_url, django_address
 
 
 class MySession(requests.Session):
@@ -55,7 +55,13 @@ class DjangoAuth:
         self.last_request_time = asyncio.get_event_loop().time() - 260
 
         # Делаем get-запрос для получения csrf-токена:
-        self.session.get(self.api_login_url)
+        response = self.session.get(self.api_login_url)
+        steps = 0
+        while response.status_code != 200 or steps < 5:
+            await asyncio.sleep(10)
+            response = self.session.get(self.api_login_url)
+            steps += 1
+
         f = open('logs_main.txt', 'a')
         f.write(f'cookies:\n{self.session.cookies}\n\n')
         f.close()
@@ -91,10 +97,13 @@ class DjangoAuth:
         while True:
             if (self.last_request_time and
                     asyncio.get_event_loop().time() - self.last_request_time > 270):
-                response = self.session.get(self.api_login_url)
+                url = f"{django_address}/profiles/options/"
+                data = {"telegram_user_id": 123123123}
+                response = self.session.get(url=url, data=data)
+                # response = self.session.get(self.api_login_url)
                 if response.status_code == 401:
                     await self.login()
-                elif response.status_code == 200:
+                elif response.status_code == 200 or response.status_code == 404:
                     self.last_request_time = asyncio.get_event_loop().time()
             await asyncio.sleep(10)  # Проверяем каждые ...
 
