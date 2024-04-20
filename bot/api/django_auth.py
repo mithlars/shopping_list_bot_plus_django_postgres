@@ -96,11 +96,10 @@ class DjangoAuth:
     async def refresh_session(self):
         """Method refreshes session in 270 seconds after last request"""
         while True:
-            if (self.last_request_time and
-                    asyncio.get_event_loop().time() - self.last_request_time > 270):
-                url = f"{django_address}/profiles/options/"
-                data = {"telegram_user_id": 123123123}
-                response = self.session.get(url=url, data=data)
+            if (self.last_request_time
+                    and asyncio.get_event_loop().time() - self.last_request_time > 270):
+                response = self.session.get(url=f"{django_address}/profiles/options/",
+                                            data={"telegram_user_id": 123123123})
                 if response.status_code == 401:
                     # response = self.session.get(self.api_login_url)
                     await self.login()
