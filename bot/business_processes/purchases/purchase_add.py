@@ -8,6 +8,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.api.django_auth import django_auth, update_last_request_time
 from bot.business_processes.purchases.purchase_delete_and_list_menu import ListRead
+from bot.business_processes.purchases.utils.list_menu_keyboard import list_menu_keyboard_builder
 from bot.constants import django_address
 from bot.create_bot import MyBot
 
@@ -97,9 +98,11 @@ class PurchasesGetAndCategorize:
                 status="same",
                 categories=categories
             )
+            # Sending message with list main keyboard to remove android keyboard:
+            await MyBot.bot.send_message(chat_id=telegram_user_id,
+                                         text=_("Choose category"),
+                                         reply_markup=await list_menu_keyboard_builder(telegram_user_id))
             # Sending message with category selecting keyboard:
-            text = _("Choose category")
-            await MyBot.bot.send_message(chat_id=telegram_user_id, text=text, reply_markup=ReplyKeyboardRemove())
             await MyBot.bot.send_message(chat_id=telegram_user_id,
                                          text=_("from the list:"),
                                          reply_markup=categorize_keyboard)
