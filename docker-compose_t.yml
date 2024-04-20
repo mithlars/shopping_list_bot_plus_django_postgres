@@ -22,7 +22,7 @@ services:
     networks:
       - shopping_list_net_t
     ports:
-      - '5433:5432'
+      - '5432:5432'
   django_t:
     container_name: django_t
     build:
