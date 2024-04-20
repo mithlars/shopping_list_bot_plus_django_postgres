@@ -34,29 +34,12 @@ class IsTelegramUserOrIsUsersList(permissions.BasePermission):
         return ip
 
     def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            print("\nНужна авторизация\n")
+            return False
         if request.user.id == TELEGRAM_BOT_USER_ID:
             client_ip = IsTelegramUserOrIsUsersList.get_client_ip(request)
             if client_ip == TELEGRAM_BOT_IP:
-                # lists = []
-                # try:
-                #     profile = UserProfile.objects.get(telegram_user_id=request.data.get("telegram_user_id"))
-                # except MultiValueDictKeyError:
-                #     print("No telegram_id in request.data.")
-                # lists = list(profile.lists.values_list('id', flat=True))
-
-                # try:
-                    # list_id = int(request.data.get('list_id'))
-
-                    # if not (list_id in lists):
-                    #     print(f"\nНе в свой список\n{lists = }\n{list_id = }")
-                    #     return False
-                # except Exception:  # TODO: Подобрать Exception class для request.data.get("list_id")
-                #     print("No 'list_id' in request.query_params")
-                #     return False
-                if not request.user.is_authenticated:
-                    print("\nНужна авторизация\n")
-                    return False
-                # print(f"{request.method} {request.get_full_path()} permissions is OK")
                 return True
             else:
                 # TODO: Тревога: Взломан TELEGRAM_BOT_USER!
