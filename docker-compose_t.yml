@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=db_t
-      - POSTGRES_PORT=5432
+      - POSTGRES_PORT=5433
       - PG_DATA=/var/lib/pgsql/pgdata
       - pgsql='psql -U postgres -nxq -v ON_ERROR_STOP=on --dbname list_db'
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
     networks:
       - shopping_list_net_t
     ports:
-      - '5433:5432'
+      - '5433:5433'
   django_t:
     container_name: django_t
     build:
