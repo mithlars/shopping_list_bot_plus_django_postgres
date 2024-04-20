@@ -52,6 +52,8 @@ class DjangoAuth:
         f.write(f'cookies:\n{self.session.cookies}\n\n')
         f.close()
 
+        self.last_request_time = asyncio.get_event_loop().time() - 260
+
         # Делаем get-запрос для получения csrf-токена:
         self.session.get(self.api_login_url)
         f = open('logs_main.txt', 'a')
@@ -90,10 +92,11 @@ class DjangoAuth:
             if (self.last_request_time and
                     asyncio.get_event_loop().time() - self.last_request_time > 270):
                 response = self.session.get(self.api_login_url)
-                self.last_request_time = asyncio.get_event_loop().time()
                 if response.status_code == 401:
                     await self.login()
-            await asyncio.sleep(200)  # Проверяем каждую секунду
+                elif response.status_code == 200:
+                    self.last_request_time = asyncio.get_event_loop().time()
+            await asyncio.sleep(10)  # Проверяем каждые ...
 
 
 django_auth = DjangoAuth(django_login_url)
