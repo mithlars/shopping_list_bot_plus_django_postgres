@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from requests.exceptions import ConnectionError
 
 from aiogram.utils.i18n import I18n
 
@@ -28,7 +29,7 @@ from bot.business_processes.purchases.purchase_uncategorize_one import purchase_
 from bot.business_processes.purchases.purchase_update import purchase_update_router
 from bot.business_processes.user.manage_friends import manage_friends_router
 from bot.middlewares import LanguageMiddleware, i18n
-from constants import admin_telegram_id, startup_admin_message
+from constants import admin_telegram_id, startup_admin_message, django_login_url
 from bot.api.django_auth import django_auth
 from create_bot import MyBot
 from aiogram import Bot
@@ -42,17 +43,28 @@ async def on_startup(bot: Bot):
 
 async def main():
 
-    # Авторизация бота в django:
+    # Ждем, когда запустится Django:
+    response = 0
+    while response == 0:
+        await asyncio.sleep(1)
+        try:
+            response = django_auth.session.get(django_login_url)
+        except ConnectionError:
+            print("\nDjango не доступен\n")
+            f = open('logs_main.txt', 'a')
+            f.write('\nDjango не доступен\n')
+            f.close()
 
-    loop = asyncio.get_event_loop()
-    f = open('logs_main.txt', 'w')
-    django_auth.last_request_time = asyncio.get_event_loop().time() - 270
+    # Авторизация бота в django:
     try:
+        f = open('logs_main.txt', 'a')
         f.write('___Start:\n\n')
         f.close()
-        # await django_auth.login()
+        await django_auth.login()
     except Exception as er:
         print(f"Авторизация провалилась\n {er}")
+
+    loop = asyncio.get_event_loop()
     # loop.run_until_complete(await django_auth.login())  # Авторизуемся при запуске бота
     loop.create_task(django_auth.refresh_session())
 
