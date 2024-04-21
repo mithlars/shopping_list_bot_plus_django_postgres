@@ -31,26 +31,26 @@ docker network rm shopping_list_net
 echo "creating docker-network named shopping_list_net:"
 docker network create --subnet=172.18.0.0/16 shopping_list_net
 
-echo "\nmoving to /home/django_bot\n"
+echo "moving to /home/django_bot"
 mkdir -m a=rwx /home/django_bot
 cd /home/django_bot
 
-echo "\nremoving old version code\n"
+echo "removing old version code"
 rm -rf ./*
 
-echo "\ndownloading last version code:\n"
+echo "downloading last version code:"
 git clone https://github.com/mithlars/shopping_list_bot_plus_django_postgres
 
 echo "moving to the project folder"
 cd shopping_list_bot_plus_django_postgres
 
-# echo "\nremoving base docker images:\n"
+# echo "removing base docker images:"
 # docker image rm django_base bot_base
 
-echo "\nbuild base image for django\n"
+echo "build base image for django"
 docker build -t django_base:latest -f djDocker/Dockerfile.base .
 
-echo "\nbuild base image for bot\n"
+echo "build base image for bot"
 docker build -t bot_base:latest -f Dockerfile.bot_base .
 
 echo "building new versions of images and upping new versions of containers:"
