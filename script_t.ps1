@@ -48,10 +48,10 @@ cd shopping_list_bot_plus_django_postgres
 # echo "removing base docker images:"
 # docker image rm django_base bot_base
 
-echo "\nbuild base image for django\n"
+echo "build base image for django"
 docker build -t django_base:latest -f djDocker/Dockerfile.base .
 
-echo "\nbuild base image for bot\n"
+echo "build base image for bot"
 docker build -t bot_base:latest -f Dockerfile.bot_base .
 
 echo "building new versions of images and upping new versions of containers:"
