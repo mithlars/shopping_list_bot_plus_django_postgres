@@ -48,8 +48,6 @@ class DjangoAuth:
 
         f = open('logs_main.txt', 'a')
         f.write('Делаем get-запрос для получения csrf-токена:\n')
-        f.write(f"\n{self.api_login_url = }\n\n")
-        f.write(f'cookies:\n{self.session.cookies}\n\n')
         f.close()
 
         self.last_request_time = asyncio.get_event_loop().time() - 245
@@ -57,7 +55,6 @@ class DjangoAuth:
         # Делаем get-запрос для получения csrf-токена:
         response = self.session.get(self.api_login_url)
         steps = 0
-        print(f"{response.status_code = }")
         while response.status_code != 200 and steps < 2:
             await asyncio.sleep(10)
             response = self.session.get(self.api_login_url)
@@ -101,7 +98,6 @@ class DjangoAuth:
                 response = self.session.get(url=f"{django_address}/profiles/options/",
                                             data={"telegram_user_id": 123123123})
                 if response.status_code == 401:
-                    # response = self.session.get(self.api_login_url)
                     await self.login()
                 elif response.status_code == 200 or response.status_code == 404:
                     self.last_request_time = asyncio.get_event_loop().time()
