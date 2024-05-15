@@ -73,7 +73,7 @@ msgid ""
 "New group *\"{new_group_name}\"* created.\n"
 "Description: *\"{new_group_description}\"*\n"
 msgstr ""
-"Новая группра *\"{new_group_name}\"* создана.\n"
+"Новая группа *\"{new_group_name}\"* создана.\n"
 "Описание: *\"{new_group_description}\"*\n"
 
 #: bot/business_processes/groups/group_add.py:113
