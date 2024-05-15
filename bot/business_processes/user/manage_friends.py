@@ -44,7 +44,7 @@ class FriendsList:
 
             number += 1
         builder.add(InlineKeyboardButton(text=_("Add"), callback_data=f"add_friend"))
-        builder.adjust(6, -1)
+        builder.adjust(6)
         keyboard = builder.as_markup(resize_keyboard=True)
         if message_text == _("Your surrounding:\n"):
             message_text = _("Your surrounding is empty.")
